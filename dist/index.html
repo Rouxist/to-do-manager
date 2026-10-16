@@ -107,13 +107,13 @@ main:has(.workspace[data-group=daily]){max-width:none}
 #token-message{font-size:14px;line-height:1.6}
 .token-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
 .token-actions button{padding:8px 14px;border:1px solid #d5d4d0;border-radius:6px;background:#f5f5f3;color:inherit}
-</style></head><body><header><div class="brand">▤ My workspace</div><div class="actions"><span id="status" role="status">No file loaded</span><button class="quiet" id="r2-open">Reload from R2</button><button class="quiet" id="r2-save" hidden>Save to R2 ⌥S</button><button class="quiet" id="download">Export .md ↗</button></div></header><main data-mode="write"><div id="initial-load-notice" hidden><span id="initial-load-message" role="status"></span> <button class="quiet" id="initial-load-retry">Retry loading</button></div><div class="toolbar"><div class="tabs" role="group" aria-label="Note view"><button data-mode="write" aria-pressed="true">Write</button><button data-mode="read" aria-pressed="false">Read</button></div><fieldset class="period-selector" aria-label="Visible planning periods"><label><input type="radio" name="period-group" value="long"><span>Long term</span></label><label><input type="radio" name="period-group" value="short"><span>Mid term</span></label><label><input type="radio" name="period-group" value="daily" checked><span>Daily</span></label></fieldset></div><div class="workspace" id="workspace" data-group="daily"><section class="note-column" data-period="annual" aria-labelledby="heading-annual" hidden><h2 class="column-title" id="heading-annual">Annual</h2><div class="editor-pane"><textarea id="editor-annual" aria-label="Annual notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-annual" aria-label="Formatted annual notes"></article></div></section><section class="note-column" data-period="quarterly" aria-labelledby="heading-quarterly" hidden><h2 class="column-title" id="heading-quarterly">Quarterly</h2><div class="editor-pane"><textarea id="editor-quarterly" aria-label="Quarterly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-quarterly" aria-label="Formatted quarterly notes"></article></div></section><section class="note-column" data-period="monthly" aria-labelledby="heading-monthly" hidden><h2 class="column-title" id="heading-monthly">Monthly</h2><div class="editor-pane"><textarea id="editor-monthly" aria-label="Monthly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-monthly" aria-label="Formatted monthly notes"></article></div></section><section class="note-column" data-period="weekly" aria-labelledby="heading-weekly" hidden><h2 class="column-title" id="heading-weekly">Weekly</h2><div class="editor-pane"><textarea id="editor-weekly" aria-label="Weekly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-weekly" aria-label="Formatted weekly notes"></article></div></section><section class="note-column" data-period="daily" aria-labelledby="heading-daily"><h2 class="column-title" id="heading-daily">Monday</h2><div class="editor-pane"><textarea id="editor-daily" aria-label="Monday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-daily" aria-label="Formatted monday notes"></article></div></section><section class="note-column" data-period="tuesday" aria-labelledby="heading-tuesday"><h2 class="column-title" id="heading-tuesday">Tuesday</h2><div class="editor-pane"><textarea id="editor-tuesday" aria-label="Tuesday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-tuesday" aria-label="Formatted tuesday notes"></article></div></section><section class="note-column" data-period="wednesday" aria-labelledby="heading-wednesday"><h2 class="column-title" id="heading-wednesday">Wednesday</h2><div class="editor-pane"><textarea id="editor-wednesday" aria-label="Wednesday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-wednesday" aria-label="Formatted wednesday notes"></article></div></section><section class="note-column" data-period="thursday" aria-labelledby="heading-thursday"><h2 class="column-title" id="heading-thursday">Thursday</h2><div class="editor-pane"><textarea id="editor-thursday" aria-label="Thursday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-thursday" aria-label="Formatted thursday notes"></article></div></section><section class="note-column" data-period="friday" aria-labelledby="heading-friday"><h2 class="column-title" id="heading-friday">Friday</h2><div class="editor-pane"><textarea id="editor-friday" aria-label="Friday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-friday" aria-label="Formatted friday notes"></article></div></section><section class="note-column" data-period="saturday" aria-labelledby="heading-saturday"><h2 class="column-title" id="heading-saturday">Saturday</h2><div class="editor-pane"><textarea id="editor-saturday" aria-label="Saturday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-saturday" aria-label="Formatted saturday notes"></article></div></section><section class="note-column" data-period="sunday" aria-labelledby="heading-sunday"><h2 class="column-title" id="heading-sunday">Sunday</h2><div class="editor-pane"><textarea id="editor-sunday" aria-label="Sunday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-sunday" aria-label="Formatted sunday notes"></article></div></section></div><section class="chores" data-period="chores" aria-labelledby="heading-chores"><h2 class="column-title" id="heading-chores">Chores</h2><div class="editor-pane"><textarea id="editor-chores" aria-label="Chores notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-chores" aria-label="Formatted chores notes"></article></div></section><footer><span id="words">0 words</span><span>Option + S (Alt + S): save to R2 · Cmd/Ctrl + S also works.</span></footer></main>
+</style></head><body><header><div class="brand">▤ My workspace</div><div class="actions"><span id="status" role="status">No file loaded</span><button class="quiet" id="r2-open">Reload from R2</button><button class="quiet" id="r2-save" hidden>Save to R2 ⌥S</button><button class="quiet" id="logout" hidden>Log out</button><button class="quiet" id="download">Export .md ↗</button></div></header><main data-mode="write"><div id="initial-load-notice" hidden><span id="initial-load-message" role="status"></span> <button class="quiet" id="initial-load-retry">Retry loading</button></div><div class="toolbar"><div class="tabs" role="group" aria-label="Note view"><button data-mode="write" aria-pressed="true">Write</button><button data-mode="read" aria-pressed="false">Read</button></div><fieldset class="period-selector" aria-label="Visible planning periods"><label><input type="radio" name="period-group" value="long"><span>Long term</span></label><label><input type="radio" name="period-group" value="short"><span>Mid term</span></label><label><input type="radio" name="period-group" value="daily" checked><span>Daily</span></label></fieldset></div><div class="workspace" id="workspace" data-group="daily"><section class="note-column" data-period="annual" aria-labelledby="heading-annual" hidden><h2 class="column-title" id="heading-annual">Annual</h2><div class="editor-pane"><textarea id="editor-annual" aria-label="Annual notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-annual" aria-label="Formatted annual notes"></article></div></section><section class="note-column" data-period="quarterly" aria-labelledby="heading-quarterly" hidden><h2 class="column-title" id="heading-quarterly">Quarterly</h2><div class="editor-pane"><textarea id="editor-quarterly" aria-label="Quarterly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-quarterly" aria-label="Formatted quarterly notes"></article></div></section><section class="note-column" data-period="monthly" aria-labelledby="heading-monthly" hidden><h2 class="column-title" id="heading-monthly">Monthly</h2><div class="editor-pane"><textarea id="editor-monthly" aria-label="Monthly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-monthly" aria-label="Formatted monthly notes"></article></div></section><section class="note-column" data-period="weekly" aria-labelledby="heading-weekly" hidden><h2 class="column-title" id="heading-weekly">Weekly</h2><div class="editor-pane"><textarea id="editor-weekly" aria-label="Weekly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-weekly" aria-label="Formatted weekly notes"></article></div></section><section class="note-column" data-period="daily" aria-labelledby="heading-daily"><h2 class="column-title" id="heading-daily">Monday</h2><div class="editor-pane"><textarea id="editor-daily" aria-label="Monday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-daily" aria-label="Formatted monday notes"></article></div></section><section class="note-column" data-period="tuesday" aria-labelledby="heading-tuesday"><h2 class="column-title" id="heading-tuesday">Tuesday</h2><div class="editor-pane"><textarea id="editor-tuesday" aria-label="Tuesday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-tuesday" aria-label="Formatted tuesday notes"></article></div></section><section class="note-column" data-period="wednesday" aria-labelledby="heading-wednesday"><h2 class="column-title" id="heading-wednesday">Wednesday</h2><div class="editor-pane"><textarea id="editor-wednesday" aria-label="Wednesday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-wednesday" aria-label="Formatted wednesday notes"></article></div></section><section class="note-column" data-period="thursday" aria-labelledby="heading-thursday"><h2 class="column-title" id="heading-thursday">Thursday</h2><div class="editor-pane"><textarea id="editor-thursday" aria-label="Thursday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-thursday" aria-label="Formatted thursday notes"></article></div></section><section class="note-column" data-period="friday" aria-labelledby="heading-friday"><h2 class="column-title" id="heading-friday">Friday</h2><div class="editor-pane"><textarea id="editor-friday" aria-label="Friday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-friday" aria-label="Formatted friday notes"></article></div></section><section class="note-column" data-period="saturday" aria-labelledby="heading-saturday"><h2 class="column-title" id="heading-saturday">Saturday</h2><div class="editor-pane"><textarea id="editor-saturday" aria-label="Saturday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-saturday" aria-label="Formatted saturday notes"></article></div></section><section class="note-column" data-period="sunday" aria-labelledby="heading-sunday"><h2 class="column-title" id="heading-sunday">Sunday</h2><div class="editor-pane"><textarea id="editor-sunday" aria-label="Sunday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-sunday" aria-label="Formatted sunday notes"></article></div></section></div><section class="chores" data-period="chores" aria-labelledby="heading-chores"><h2 class="column-title" id="heading-chores">Chores</h2><div class="editor-pane"><textarea id="editor-chores" aria-label="Chores notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-chores" aria-label="Formatted chores notes"></article></div></section><footer><span id="words">0 words</span><span>Option + S (Alt + S): save to R2 · Cmd/Ctrl + S also works.</span></footer></main>
 <dialog id="token-dialog" aria-labelledby="token-title">
   <form id="token-form">
-    <h2 id="token-title">Authorize saving</h2>
+    <h2 id="token-title">Unlock notes</h2>
     <label for="notes-token">NOTES_TOKEN</label>
     <input id="notes-token" type="password" required autocomplete="off" autofocus>
-    <p id="token-message" role="status">Enter the NOTES_TOKEN configured for this app. It stays only in this tab.</p>
+    <p id="token-message" role="status">Enter NOTES_TOKEN to stay signed in on this browser for 90 days.</p>
     <div class="token-actions"><button id="token-cancel" type="button">Cancel</button><button id="token-submit" type="submit">Save to R2</button></div>
   </form>
 </dialog>
@@ -274,7 +274,7 @@ let savedLabel='No file loaded';
 function hasUnsavedChanges(){return JSON.stringify(noteSnapshot())!==savedSnapshot;}
 function updateSaveStatus(){status.textContent=hasUnsavedChanges()?'Unsaved changes':savedLabel;}
 function change(){render();updateSaveStatus();}
-for(const key of periods){editors[key].addEventListener('input',change);previews[key].addEventListener('change',event=>{const checkbox=event.target;if(!checkbox.matches('input[data-line]'))return;const lines=editors[key].value.split('\n'),i=Number(checkbox.dataset.line);if(!Number.isInteger(i)||i<0||i>=lines.length)return;lines[i]=lines[i].replace(/^(\s*[-*+]\s+|\s*\d+[.)]\s+)\[[ xX]\]/,(_,prefix)=>prefix+'['+(checkbox.checked?'x':' ')+']');editors[key].value=lines.join('\n');change();});}
+for(const key of periods){editors[key].addEventListener('input',change);previews[key].addEventListener('change',event=>{const checkbox=event.target;if(loggingOut)return;if(!checkbox.matches('input[data-line]'))return;const lines=editors[key].value.split('\n'),i=Number(checkbox.dataset.line);if(!Number.isInteger(i)||i<0||i>=lines.length)return;lines[i]=lines[i].replace(/^(\s*[-*+]\s+|\s*\d+[.)]\s+)\[[ xX]\]/,(_,prefix)=>prefix+'['+(checkbox.checked?'x':' ')+']');editors[key].value=lines.join('\n');change();});}
 document.querySelectorAll('input[name="period-group"]').forEach(radio=>radio.addEventListener('change',()=>{if(!radio.checked)return;workspace.dataset.group=radio.value;const visible={long:['annual','quarterly'],short:['monthly','weekly'],daily:['daily','tuesday','wednesday','thursday','friday','saturday','sunday']}[radio.value];workspace.style.setProperty('--column-count',visible.length);document.querySelectorAll('.note-column').forEach(column=>column.hidden=!visible.includes(column.dataset.period));}));
 document.querySelectorAll('.tabs button').forEach(button=>button.addEventListener('click',()=>{document.querySelector('main').dataset.mode=button.dataset.mode;document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));}));
 function noteSnapshot(){return Object.fromEntries(periods.map(key=>[key,editors[key].value]));}
@@ -315,43 +315,58 @@ function loadNotes(notes,label){
   savedSnapshot=JSON.stringify(noteSnapshot());savedLabel=label;
   render();updateSaveStatus();return true;
 }
-const r2SaveButton=document.querySelector('#r2-save');
-let r2Connection=null,r2Pending=false,initialLoading=false,notesToken='';
+const r2SaveButton=document.querySelector('#r2-save'),logoutButton=document.querySelector('#logout');
+let r2Connection=null,r2Pending=false,initialLoading=false,loginPending=false,loggingOut=false,tokenAction='load';
 const tokenDialog=document.querySelector('#token-dialog'),tokenInput=document.querySelector('#notes-token'),tokenMessage=document.querySelector('#token-message');
-function askForToken(){if(!tokenDialog.open)tokenDialog.showModal();}
-document.querySelector('#token-cancel').addEventListener('click',()=>tokenDialog.close());
+const initialNotice=document.querySelector('#initial-load-notice'),initialMessage=document.querySelector('#initial-load-message');
+const loginExplanation='Enter NOTES_TOKEN to stay signed in on this browser for 90 days.';
+function askForToken(action='load'){
+  tokenAction=action;
+  document.querySelector('#token-submit').textContent=action==='load'?'Sign in & load':'Sign in & save';
+  if(!tokenDialog.open)tokenDialog.showModal();
+}
+document.querySelector('#token-cancel').addEventListener('click',()=>{tokenInput.value='';tokenDialog.close();});
+tokenDialog.addEventListener('cancel',()=>{tokenInput.value='';});
 document.querySelector('#token-form').addEventListener('submit',async event=>{
   event.preventDefault();
-  if(r2Pending)return;
-  notesToken=tokenInput.value.trim();
-  if(!notesToken)return;
+  if(r2Pending||initialLoading||loginPending||loggingOut)return;
+  const token=tokenInput.value.trim();
   tokenInput.value='';
-  await saveR2();
+  if(!token)return;
+  const action=tokenAction;
+  loginPending=true;document.querySelector('#token-submit').disabled=true;
+  tokenMessage.textContent='Signing in…';
+  try{
+    const response=await fetch('/api/session',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({token})});
+    if(!response.ok)throw new Error(await response.text());
+    tokenDialog.close();tokenMessage.textContent=loginExplanation;logoutButton.hidden=false;
+    loginPending=false;
+    if(action==='load')await loadInitialNotes();
+    else await saveR2();
+  }catch(error){tokenMessage.textContent=error.message||'Could not sign in. Please try again.';}
+  finally{loginPending=false;document.querySelector('#token-submit').disabled=false;}
 });
 async function saveR2(){
-  if(!r2Connection||r2Pending||initialLoading)return;
-  if(!notesToken){askForToken();return;}
+  if(!r2Connection||r2Pending||initialLoading||loginPending||loggingOut)return;
   const connection=r2Connection,snapshot=JSON.stringify(noteSnapshot()),content=markdownBackup();
   r2Pending=true;r2SaveButton.disabled=true;status.textContent='Saving to R2…';
   try{
-    const response=await fetch(connection.endpoint,{method:'PUT',headers:{Authorization:'Bearer '+notesToken,'Content-Type':'text/markdown; charset=utf-8','If-Match':connection.etag},body:content});
+    const response=await fetch(connection.endpoint,{method:'PUT',credentials:'same-origin',headers:{'Content-Type':'text/markdown; charset=utf-8','If-Match':connection.etag},body:content});
     if(!response.ok){
       const message=await response.text();
-      if(response.status===401){notesToken='';tokenMessage.textContent=message;askForToken();}
+      if(response.status===401){tokenMessage.textContent='Your sign-in expired. Enter NOTES_TOKEN to save your edits.';askForToken('save');}
       throw new Error(message);
     }
     const etag=response.headers.get('ETag');
-    if(!etag)throw new Error('Save could not be confirmed. Reconnect to R2 before saving again.');
+    if(!etag)throw new Error('Save could not be confirmed. Reload R2 before saving again.');
     connection.etag=etag;savedSnapshot=snapshot;savedLabel='Saved to R2';
-    initialNotice.hidden=true;tokenDialog.close();tokenMessage.textContent='Enter the NOTES_TOKEN configured for this app. It stays only in this tab.';
+    initialNotice.hidden=true;logoutButton.hidden=false;
   }catch(error){initialMessage.textContent=error.message||'Could not save to R2.';initialNotice.hidden=false;}
   finally{r2Pending=false;r2SaveButton.disabled=false;updateSaveStatus();}
 }
 r2SaveButton.addEventListener('click',saveR2);
-
-const initialNotice=document.querySelector('#initial-load-notice'),initialMessage=document.querySelector('#initial-load-message');
 async function loadInitialNotes(){
-  if(initialLoading||r2Pending)return;
+  if(initialLoading||r2Pending||loginPending||loggingOut)return;
   initialLoading=true;
   const before=JSON.stringify(noteSnapshot());
   for(const editor of Object.values(editors))editor.disabled=true;
@@ -359,10 +374,17 @@ async function loadInitialNotes(){
   document.querySelector('#initial-load-retry').disabled=true;
   initialNotice.hidden=true;status.textContent='Loading notes…';
   try{
-    if(location.protocol==='file:')throw new Error('Run npm run dev or open the deployed app to load R2_PUBLIC_URL from your environment.');
-    const url='/api/notes?source=public';
-    const response=await fetch(url,{cache:'no-store'});
-    if(!response.ok)throw new Error(await response.text());
+    if(location.protocol==='file:')throw new Error('Run npm run dev or open the deployed app to load your notes.');
+    const response=await fetch('/api/notes?source=public',{cache:'no-store',credentials:'same-origin'});
+    if(!response.ok){
+      const message=await response.text();
+      if(response.status===401){
+        tokenMessage.textContent=loginExplanation;askForToken('load');
+        savedLabel='Sign in to load notes';updateSaveStatus();return;
+      }
+      throw new Error(message);
+    }
+    logoutButton.hidden=false;
     const etag=response.headers.get('ETag');
     if(!etag)throw new Error('The Markdown source must return an ETag header to enable saving.');
     const notes=parseMarkdownBackup(await response.text());
@@ -371,25 +393,64 @@ async function loadInitialNotes(){
       r2Connection={endpoint:'/api/notes',etag};r2SaveButton.hidden=false;
     }else updateSaveStatus();
   }catch(error){
-    initialNotice.hidden=false;
-    initialMessage.textContent='Could not load initial notes. '+(error.message||'Please try again.');
+    initialNotice.hidden=false;initialMessage.textContent='Could not load initial notes. '+(error.message||'Please try again.');
     savedLabel='Initial load failed';updateSaveStatus();
   }finally{
     initialLoading=false;
-    for(const editor of Object.values(editors))editor.disabled=false;
+    for(const editor of Object.values(editors))editor.disabled=!r2Connection;
     document.querySelector('#r2-open').disabled=false;
     document.querySelector('#initial-load-retry').disabled=false;
   }
 }
 document.querySelector('#initial-load-retry').addEventListener('click',loadInitialNotes);
 document.querySelector('#r2-open').addEventListener('click',loadInitialNotes);
+logoutButton.addEventListener('click',async()=>{
+  if(loggingOut||r2Pending||initialLoading||loginPending)return;
+  if(hasUnsavedChanges()&&!confirm('Discard unsaved edits and log out? Export first if you want to keep them.'))return;
+  loggingOut=true;logoutButton.disabled=true;
+  for(const editor of Object.values(editors))editor.disabled=true;
+  try{
+    const response=await fetch('/api/session',{method:'DELETE',credentials:'same-origin'});
+    if(!response.ok)throw new Error(await response.text());
+    for(const editor of Object.values(editors))editor.value='';
+    r2Connection=null;r2SaveButton.hidden=true;logoutButton.hidden=true;
+    savedSnapshot=JSON.stringify(noteSnapshot());savedLabel='Signed out';
+    initialNotice.hidden=true;tokenInput.value='';tokenMessage.textContent=loginExplanation;
+    render();updateSaveStatus();askForToken('load');
+  }catch(error){initialMessage.textContent=error.message||'Could not log out. Please try again.';initialNotice.hidden=false;}
+  finally{loggingOut=false;logoutButton.disabled=false;for(const editor of Object.values(editors))editor.disabled=!r2Connection;}
+});
+
+// Duplicate the current line, or selected complete lines, in the editor that has focus.
+for(const editor of Object.values(editors))editor.addEventListener('keydown',event=>{
+  if(!event.altKey||event.metaKey||event.ctrlKey||event.isComposing||editor.disabled||editor.readOnly)return;
+  if(event.key!=='ArrowUp'&&event.key!=='ArrowDown')return;
+  event.preventDefault();
+  const text=editor.value,start=editor.selectionStart,end=editor.selectionEnd;
+  const lineStart=start===0?0:text.lastIndexOf('\n',start-1)+1;
+  // A selection ending at the start of the next line excludes that next line.
+  const lastSelected=end>start?end-1:end;
+  const nextBreak=text.indexOf('\n',lastSelected);
+  const lineEnd=nextBreak===-1?text.length:nextBreak;
+  const block=text.slice(lineStart,lineEnd);
+  const above=event.key==='ArrowUp';
+  const position=above?lineStart:lineEnd;
+  const insertion=above?block+'\n':'\n'+block;
+  const shift=above?0:insertion.length;
+  const scrollTop=editor.scrollTop,scrollLeft=editor.scrollLeft;
+  const direction=editor.selectionDirection;
+  editor.setRangeText(insertion,position,position,'preserve');
+  editor.setSelectionRange(start+shift,end+shift,direction);
+  editor.scrollTop=scrollTop;editor.scrollLeft=scrollLeft;
+  change();
+});
 
 document.addEventListener('keydown',event=>{
   const optionSave=event.altKey&&!event.metaKey&&!event.ctrlKey&&(event.code==='KeyS'||event.key.toLowerCase()==='s');
   const commandSave=(event.metaKey||event.ctrlKey)&&!event.altKey&&event.key.toLowerCase()==='s';
   if(!optionSave&&!commandSave)return;
   event.preventDefault();
-  if(event.repeat||r2Pending||initialLoading)return;
+  if(event.repeat||r2Pending||initialLoading||loginPending||loggingOut)return;
   if(r2Connection){saveR2();return;}
   loadInitialNotes();
 });

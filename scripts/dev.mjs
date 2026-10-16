@@ -9,12 +9,17 @@ const envFile = resolve(root, '.env');
 if (existsSync(envFile)) process.loadEnvFile(envFile);
 // Import after loading local credentials so the handler sees them.
 const { default: notes } = await import('../api/notes.js');
+const { default: session } = await import('../api/session.js');
 let port = Number(process.env.PORT || 3000);
 
 const server = createServer(async (incoming, outgoing) => {
   try {
-    const url = new URL(incoming.url, `http://127.0.0.1:${port}`);
-    if (url.pathname === '/api/notes') {
+    const host = incoming.headers.host;
+    if (![`127.0.0.1:${port}`, `localhost:${port}`, `[::1]:${port}`].includes(host)) {
+      outgoing.writeHead(403).end('Use the local development address.');return;
+    }
+    const url = new URL(incoming.url, `http://${host}`);
+    if (url.pathname === '/api/notes' || url.pathname === '/api/session') {
       const chunks = [];
       let bytes = 0;
       for await (const chunk of incoming) {
@@ -30,7 +35,7 @@ const server = createServer(async (incoming, outgoing) => {
         headers: incoming.headers,
         ...(!['GET', 'HEAD'].includes(incoming.method) ? { body: Buffer.concat(chunks) } : {}),
       });
-      const response = await notes.fetch(request);
+      const response = await (url.pathname === '/api/session' ? session : notes).fetch(request);
       outgoing.writeHead(response.status, Object.fromEntries(response.headers));
       outgoing.end(Buffer.from(await response.arrayBuffer()));
       return;

@@ -1,115 +1,105 @@
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const vm = require('node:vm');
-const path = require('node:path');
-
-const html = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf8');
-const script = html.match(/<script>([\s\S]*)<\/script>/)[1];
-const nodes = new Map();
-function node(id) {
-  if (!nodes.has(id)) nodes.set(id, {
-    value: '', dataset: {}, disabled: false, open: false, events: {},
-    style: { setProperty() {} },
-    addEventListener(type, callback) { this.events[type] = callback; },
-    setAttribute() {},
-    showModal() { this.open = true; }, close() { this.open = false; },
-    requestSubmit() { this.submission = this.events.submit({ preventDefault() {} }); },
-    click() { this.events.click?.(); },
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
+const html=fs.readFileSync(path.join(__dirname,'../dist/index.html'),'utf8');
+const script=html.match(/<script>([\s\S]*)<\/script>/)[1];
+function createApp(){
+  const nodes=new Map(),documentEvents={},windowEvents={},requests=[];
+  let downloads=0;
+  function node(id){
+    if(!nodes.has(id))nodes.set(id,{
+      value:'',dataset:{},disabled:false,open:false,hidden:false,events:{},style:{setProperty(){}},
+      addEventListener(type,callback){this.events[type]=callback;},setAttribute(){},
+      setRangeText(text,start,end){this.value=this.value.slice(0,start)+text+this.value.slice(end);},
+      setSelectionRange(start,end,direction){this.selectionStart=start;this.selectionEnd=end;this.selectionDirection=direction;},
+      showModal(){this.open=true;},close(){this.open=false;},click(){return this.events.click?.();},
+    });
+    return nodes.get(id);
+  }
+  for(const match of html.matchAll(/<[^>]*\bid="([^"]+)"[^>]*>/g))node('#'+match[1]).hidden=/\shidden(?:\s|>)/.test(match[0]);
+  const context=vm.createContext({
+    document:{querySelector(selector){assert(nodes.has(selector),selector);return node(selector);},querySelectorAll(){return [];},addEventListener(type,callback){documentEvents[type]=callback;},createElement(){return {click(){downloads++;}};}},
+    window:{addEventListener(type,callback){windowEvents[type]=callback;}},location:{protocol:'http:',hostname:'127.0.0.1'},
+    get localStorage(){throw new Error('No browser storage for notes or raw token');},get sessionStorage(){throw new Error('No browser storage for notes or raw token');},
+    fetch(url,options){return new Promise((resolve,reject)=>requests.push({url,options,resolve,reject}));},
+    Blob:class{},URL:class extends URL{static createObjectURL(){return 'blob:test';}static revokeObjectURL(){}},
+    setTimeout(){},confirm(){return true;},alert(message){throw new Error(message);},
   });
-  return nodes.get(id);
-}
-for (const match of html.matchAll(/id="([^"]+)"/g)) node('#' + match[1]);
-const documentEvents = {}, windowEvents = {};
-let resolveFetch, rejectFetch, request, downloads = 0;
-const context = vm.createContext({
-  document: {
-    querySelector(selector) { assert(nodes.has(selector), selector); return node(selector); },
-    querySelectorAll() { return []; },
-    addEventListener(type, callback) { documentEvents[type] = callback; },
-    createElement() { return { click() { downloads++; } }; },
-  },
-  window: { addEventListener(type, callback) { windowEvents[type] = callback; } },
-  location: { protocol: 'http:', hostname: '127.0.0.1' },
-  // Any accidental browser storage access must fail this test.
-  get localStorage() { throw new Error('Browser storage must not be used'); },
-  get sessionStorage() { throw new Error('Browser storage must not be used'); },
-  fetch(url, options) {
-    request = { url, options };
-    return new Promise((resolve, reject) => { resolveFetch = resolve; rejectFetch = reject; });
-  },
-  Blob: class {}, URL: class extends URL { static createObjectURL() { return 'blob:test'; } static revokeObjectURL() {} },
-  setTimeout() {}, confirm() { return true; }, alert(message) { throw new Error(message); },
-});
-vm.runInContext(script, context);
-const isDirty = () => vm.runInContext('hasUnsavedChanges()', context);
-const edit = (value) => { node('#editor-daily').value = value; node('#editor-daily').events.input(); };
-function leaving() {
-  let prevented = false;
-  windowEvents.beforeunload({ preventDefault() { prevented = true; } });
-  return prevented;
-}
-function shortcut(key = 'ß', code = 'KeyS') {
-  let prevented = false;
-  documentEvents.keydown({ key, code, altKey: true, preventDefault() { prevented = true; } });
-  assert(prevented, 'Option+S should override the OS-specific character');
+  vm.runInContext(script,context);
+  return {node,nodes,context,requests,documentEvents,windowEvents,get downloads(){return downloads;},get latest(){return requests.at(-1);}};
 }
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
-function success(etag='"saved-etag"'){
-  resolveFetch({ok:true,headers:{get(){return etag;}}});
-}
+const response=(status=200,text='',etag='"initial"')=>({ok:status>=200&&status<300,status,text:async()=>text,headers:{get(name){return name.toLowerCase()==='etag'?etag:null;}}});
+const notes=Object.fromEntries(['chores','annual','quarterly','monthly','weekly','daily','tuesday','wednesday','thursday','friday','saturday','sunday'].map(key=>[key,'Remote '+key]));
+const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringify(notes))+' -->';
 (async()=>{
-  assert(!nodes.has('#backup'));assert(!nodes.has('#import'));assert(!nodes.has('#import-file'));
-  assert.equal(request.url,'/api/notes?source=public');
-  assert(node('#editor-daily').disabled,'Disable editing during initial load');
-  const remoteNotes=Object.fromEntries(vm.runInContext('periods',context).map(key=>[key,'Remote '+key]));
-  const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringify(remoteNotes))+' -->';
-  resolveFetch({ok:true,headers:{get(){return '"initial"';}},text:async()=>remoteText});
-  await vm.runInContext('initialLoadPromise',context);
-  assert.equal(node('#editor-daily').value,'Remote daily');assert(!isDirty());assert(!leaving());
-  assert(!node('#editor-daily').disabled);
-  edit('- [ ] Parent\n  - Child');assert(isDirty());assert(leaving());
-  assert.equal(node('#status').textContent,'Unsaved changes');
-  edit('Remote daily');assert(!isDirty());assert(!leaving());
-  assert(!nodes.has('#r2-token'));assert(!nodes.has('#r2-form'));
-  assert(!node('#r2-save').hidden,'Initial load enables saving without token entry');
-  edit('Save this to R2');shortcut();
-  assert(node('#token-dialog').open);assert(isDirty());
+  const app=createApp(),{node,context}=app;
+  const isDirty=()=>vm.runInContext('hasUnsavedChanges()',context);
+  const edit=value=>{node('#editor-daily').value=value;node('#editor-daily').events.input();};
+  const leaving=()=>{let prevented=false;app.windowEvents.beforeunload({preventDefault(){prevented=true;}});return prevented;};
+  const shortcut=()=>{let prevented=false;app.documentEvents.keydown({key:'ß',code:'KeyS',altKey:true,preventDefault(){prevented=true;}});assert(prevented);};
+  const submit=token=>{node('#notes-token').value=token;return node('#token-form').events.submit({preventDefault(){}});};
+  assert(!app.nodes.has('#backup'));assert(!app.nodes.has('#import'));assert(!app.nodes.has('#import-file'));
+  assert.equal(app.latest.url,'/api/notes?source=public');assert.equal(app.latest.options.credentials,'same-origin');
+  assert(!node('#token-dialog').open,'Try the existing cookie before prompting');
+  app.latest.resolve(response(401,'Please sign in.'));await vm.runInContext('initialLoadPromise',context);
+  assert(node('#token-dialog').open);assert(node('#editor-daily').disabled);assert.equal(node('#editor-daily').value,'');
+  let pending=submit('wrong');assert.equal(app.latest.url,'/api/session');assert.equal(node('#notes-token').value,'');
+  app.latest.resolve(response(401,'Incorrect NOTES_TOKEN.'));await pending;
+  assert(node('#token-dialog').open);assert(node('#editor-daily').disabled);
+  pending=submit('correct-token');assert.equal(JSON.parse(app.latest.options.body).token,'correct-token');
+  app.latest.resolve(response());await tick();assert.equal(app.latest.url,'/api/notes?source=public');
+  app.latest.resolve(response(200,remoteText));await pending;
+  assert.equal(node('#editor-daily').value,'Remote daily');assert(!node('#token-dialog').open);assert(!node('#logout').hidden);
+  assert.equal(vm.runInContext('typeof notesToken',context),'undefined');assert(!isDirty());assert(!leaving());
+  edit('change');assert(isDirty());assert(leaving());edit('Remote daily');assert(!isDirty());
+  edit('Save this to R2');shortcut();assert.equal(app.latest.options.method,'PUT');
+  assert.equal(app.latest.options.headers.Authorization,undefined);assert.equal(app.latest.options.headers['If-Match'],'"initial"');
+  assert(leaving());edit('Edited during save');app.latest.resolve(response());await tick();assert(isDirty());
+  shortcut();app.latest.resolve(response(200,'','"newer"'));await tick();assert(!isDirty());assert(!leaving());
+  edit('Keep these unsaved edits');pending=node('#r2-save').click();
+  app.latest.resolve(response(401,'Session expired.'));await pending;
+  assert(node('#token-dialog').open);assert(isDirty());assert.equal(node('#editor-daily').value,'Keep these unsaved edits');
   node('#token-cancel').click();assert(!node('#token-dialog').open);assert(isDirty());
-  shortcut();node('#notes-token').value='incorrect-token';
-  const wrongToken=node('#token-form').events.submit({preventDefault(){}});
-  resolveFetch({ok:false,status:401,text:async()=>'Incorrect NOTES_TOKEN.'});await wrongToken;
-  assert(isDirty());assert(node('#token-dialog').open);
-  node('#notes-token').value='correct-token';
-  const firstSave=node('#token-form').events.submit({preventDefault(){}});
-  assert.equal(request.options.headers.Authorization,'Bearer correct-token');
-  assert.equal(request.options.method,'PUT');assert.equal(request.options.headers['If-Match'],'"initial"');
-  assert(leaving(),'Pending save must still warn');
-  edit('Edited while saving');success();await firstSave;assert(isDirty(),'Edits during save stay unsaved');
-  shortcut();success('"newer"');await tick();
-  assert(!isDirty());assert(!leaving());assert.equal(node('#status').textContent,'Saved to R2');
-  edit('Conflict must keep these edits');
-  const conflicting=node('#r2-save').events.click();
-  resolveFetch({ok:false,text:async()=>'The file changed in R2.'});await conflicting;
-  assert(isDirty());assert(leaving());assert.equal(node('#editor-daily').value,'Conflict must keep these edits');
-  assert.equal(node('#initial-load-message').textContent,'The file changed in R2.');
-  const failed=node('#r2-save').events.click();rejectFetch(new Error('Network unavailable'));await failed;
-  assert(isDirty());assert(leaving());
-  node('#download').click();assert.equal(downloads,1);assert(isDirty(),'Download cannot confirm a disk save');
-  edit('- [ ] Task');
-  const save=node('#r2-save').events.click();success();await save;assert(!isDirty());
+  shortcut();app.latest.resolve(response(401,'Session expired.'));await tick();
+  pending=submit('correct-token');app.latest.resolve(response());await tick();
+  assert.equal(app.latest.options.method,'PUT','Reauthentication retries saving, not loading');
+  app.latest.resolve(response());await pending;assert(!isDirty());
+  edit('Conflict');pending=node('#r2-save').click();app.latest.resolve(response(412,'Changed in R2.'));await pending;
+  assert(isDirty());assert.equal(node('#editor-daily').value,'Conflict');
+  pending=node('#r2-save').click();app.latest.reject(new Error('Offline'));await pending;assert(isDirty());
+  node('#download').click();assert.equal(app.downloads,1);assert(isDirty());
+  edit('- [ ] Task');pending=node('#r2-save').click();app.latest.resolve(response());await pending;
   node('#preview-daily').events.change({target:{matches(){return true;},dataset:{line:'0'},checked:true}});
   assert.equal(node('#editor-daily').value,'- [x] Task');assert(leaving());
-  const retry=node('#initial-load-retry').events.click();rejectFetch(new Error('Public URL unavailable'));await retry;
+  pending=node('#initial-load-retry').click();app.latest.reject(new Error('Unavailable'));await pending;
   assert.equal(node('#editor-daily').value,'- [x] Task');assert(isDirty());
-  assert(!node('#initial-load-notice').hidden);assert(!node('#editor-daily').disabled);
-  const delayed=node('#initial-load-retry').events.click();
-  edit('Edit while request is pending');
-  resolveFetch({ok:true,headers:{get(){return '"initial"';}},text:async()=>remoteText});await delayed;
-  assert.equal(node('#editor-daily').value,'Edit while request is pending');assert(isDirty());
-  context.location.protocol='file:';
-  const previousRequest=request;
-  await node('#r2-open').events.click();
-  assert.equal(request,previousRequest);assert(node('#initial-load-message').textContent.includes('npm run dev'));
-  assert(!('pagehide' in windowEvents));
-  console.log('Passed initial URL loading, removed buttons, edit preservation, token-protected R2 saves, failure/retry, shortcuts, and close warning.');
+  pending=node('#initial-load-retry').click();edit('Edit during loading');app.latest.resolve(response(200,remoteText));await pending;
+  assert.equal(node('#editor-daily').value,'Edit during loading');assert(isDirty());
+  function duplicate(input,start,end,key,expected,newStart,newEnd=start===end?newStart:end){
+    const editor=node('#editor-daily');editor.value=input;editor.setSelectionRange(start,end,'forward');let prevented=false;
+    editor.events.keydown({altKey:true,key,preventDefault(){prevented=true;}});
+    assert(prevented);assert.equal(editor.value,expected);assert.equal(editor.selectionStart,newStart);assert.equal(editor.selectionEnd,newEnd);assert(isDirty());assert(leaving());
+  }
+  duplicate('first\n  - 📚 task\nlast',9,9,'ArrowDown','first\n  - 📚 task\n  - 📚 task\nlast',21);
+  duplicate('one\ntwo',5,5,'ArrowUp','one\ntwo\ntwo',5);duplicate('one\ntwo',5,5,'ArrowDown','one\ntwo\ntwo',9);
+  duplicate('one\ntwo',0,0,'ArrowUp','one\none\ntwo',0);duplicate('',0,0,'ArrowDown','\n',1);
+  duplicate('\nnext',0,0,'ArrowUp','\n\nnext',0);duplicate('one\ntwo\nthree',0,8,'ArrowDown','one\ntwo\none\ntwo\nthree',8,16);
+  duplicate('one\ntwo\nthree',1,6,'ArrowUp','one\ntwo\none\ntwo\nthree',1,6);
+  const unchanged=node('#editor-daily').value;
+  node('#editor-daily').events.keydown({altKey:false,key:'ArrowDown',preventDefault(){throw new Error('Normal arrows must remain unchanged');}});
+  assert.equal(node('#editor-daily').value,unchanged);
+  for(const key of Object.keys(notes))assert.equal(typeof node('#editor-'+key).events.keydown,'function');
+  context.confirm=()=>false;let count=app.requests.length;await node('#logout').click();assert.equal(app.requests.length,count);assert(isDirty());
+  context.confirm=()=>true;pending=node('#logout').click();app.latest.resolve(response(500,'Logout failed'));await pending;
+  assert.equal(node('#editor-daily').value,unchanged);assert(isDirty());
+  pending=node('#logout').click();assert.equal(app.latest.url,'/api/session');assert.equal(app.latest.options.method,'DELETE');
+  app.latest.resolve(response());await pending;
+  assert(node('#logout').hidden);assert(node('#token-dialog').open);assert(node('#editor-daily').disabled);assert(!isDirty());assert(!leaving());
+  for(const key of Object.keys(notes)){assert.equal(node('#editor-'+key).value,'');assert(!node('#preview-'+key).innerHTML.includes('Remote'));}
+  const reopened=createApp();reopened.latest.resolve(response(200,remoteText));await vm.runInContext('initialLoadPromise',reopened.context);
+  assert(!reopened.node('#token-dialog').open);assert.equal(reopened.requests.length,1,'A valid browser cookie should avoid logging in again');
+  assert.equal(reopened.node('#editor-daily').value,'Remote daily');
+  const loggedOut=createApp();loggedOut.latest.resolve(response(401,'Sign in'));await vm.runInContext('initialLoadPromise',loggedOut.context);
+  assert(loggedOut.node('#token-dialog').open);assert.equal(loggedOut.node('#editor-daily').value,'');
+  assert(!('pagehide' in app.windowEvents));
+  console.log('Passed persistent-login frontend flow, expiry and reauthentication, logout/cancel/failure, dirty tracking, shortcuts, duplication, and simulated reopening.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

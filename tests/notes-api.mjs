@@ -48,17 +48,22 @@ assert.equal(response.status, 502); assert(!(await response.text()).includes('cr
 console.log('Passed Vercel API environment configuration, all-panel validation, Unicode, R2 target, reads/writes, limits, and stale-save protection.');
 
 let publicRequest;
-const publicHandler=createNotesHandler({env:{R2_PUBLIC_URL:'https://example.com/notes.md'},fetchPublic:async(url,options)=>{
+const publicHandler=createNotesHandler({env:{NOTES_TOKEN:env.NOTES_TOKEN,R2_PUBLIC_URL:'https://example.com/notes.md'},fetchPublic:async(url,options)=>{
   publicRequest={url,options};return new Response(content,{headers:{'Content-Type':'text/markdown','ETag':'"public-etag"'}});
 }});
-response=await publicHandler(new Request('https://app.example/api/notes?source=public'));
+response=await publicHandler(new Request('https://app.example/api/notes?source=public',{headers:auth}));
 assert.equal(response.status,200);assert.equal(await response.text(),content);assert.equal(response.headers.get('ETag'),'"public-etag"');
 assert.equal(publicRequest.url,'https://example.com/notes.md');
 assert.equal(publicRequest.options.cache,'no-store');
-const unavailable=createNotesHandler({env:{R2_PUBLIC_URL:'https://example.com/notes.md'},fetchPublic:async()=>new Response('No',{status:403})});
-assert.equal((await unavailable(new Request('https://app.example/api/notes?source=public'))).status,502);
-assert.equal((await publicHandler(new Request('https://app.example/api/notes?source=public',{method:'PUT'}))).status,503);
+const unavailable=createNotesHandler({env:{NOTES_TOKEN:env.NOTES_TOKEN,R2_PUBLIC_URL:'https://example.com/notes.md'},fetchPublic:async()=>new Response('No',{status:403})});
+assert.equal((await unavailable(new Request('https://app.example/api/notes?source=public',{headers:auth}))).status,502);
+assert.equal((await publicHandler(new Request('https://app.example/api/notes?source=public',{method:'PUT'}))).status,401);
 console.log('Passed public URL proxy loading with ETag propagation; writes still require server-side R2 configuration.');
 
-const unconfigured=createNotesHandler({env:{},fetchPublic:async()=>{throw new Error('Must not fetch without URL');}});
-assert.equal((await unconfigured(new Request('https://app.example/api/notes?source=public'))).status,503);
+const unconfigured=createNotesHandler({env:{NOTES_TOKEN:env.NOTES_TOKEN},fetchPublic:async()=>{throw new Error('Must not fetch without URL');}});
+assert.equal((await unconfigured(new Request('https://app.example/api/notes?source=public',{headers:auth}))).status,503);
+
+publicRequest=null;
+assert.equal((await publicHandler(new Request('https://app.example/api/notes?source=public'))).status,401);
+assert.equal((await publicHandler(new Request('https://app.example/api/notes?source=public',{headers:{Authorization:'Bearer incorrect'}}))).status,401);
+assert.equal(publicRequest,null,'Unauthorized reads must never fetch the Markdown source');

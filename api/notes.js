@@ -1,4 +1,4 @@
-import { createHash, timingSafeEqual } from 'node:crypto';
+import { configured, authorization, sameOrigin } from '../lib/auth.js';
 import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 
 const LIMIT = 2 * 1024 * 1024;
@@ -19,7 +19,11 @@ function clientFor(env) {
 
 export function createNotesHandler({ env = process.env, clientFactory = clientFor, fetchPublic = fetch } = {}) {
   return async function handle(request) {
-    // The source object is already public; proxying this exact URL avoids browser CORS restrictions.
+    if (!configured(env)) return reply('Configure NOTES_TOKEN in your environment (at least 32 characters).', 503);
+    const access = authorization(request, env);
+    if (!access) return reply('Please sign in with NOTES_TOKEN.', 401);
+    if (access === 'cookie' && request.method !== 'GET' && !sameOrigin(request)) return reply('A same-origin request is required.', 403);
+    // Require the app token before proxying the configured Markdown source.
     if (request.method === 'GET' && new URL(request.url).searchParams.get('source') === 'public') {
       try {
         const source = env.R2_PUBLIC_URL;
@@ -39,9 +43,6 @@ export function createNotesHandler({ env = process.env, clientFactory = clientFo
         return reply('Could not reach the public Markdown file. Please try again.', 502);
       }
     }
-    if (!env.NOTES_TOKEN || env.NOTES_TOKEN.length < 32) return reply('Configure NOTES_TOKEN in your environment (at least 32 characters).', 503);
-    const hash = value => createHash('sha256').update(value).digest();
-    if (!timingSafeEqual(hash(request.headers.get('Authorization') || ''), hash('Bearer ' + env.NOTES_TOKEN))) return reply('Incorrect NOTES_TOKEN.', 401);
     if (!['GET', 'PUT'].includes(request.method)) return reply('Method not allowed.', 405, { Allow: 'GET, PUT' });
     if (!env.R2_ACCOUNT_ID || !env.R2_ACCESS_KEY_ID || !env.R2_SECRET_ACCESS_KEY) return reply('Configure the R2 credentials in Vercel.', 503);
     const target = { Bucket: env.R2_BUCKET || 'main-blog', Key: env.R2_OBJECT_KEY || 'to-do-manager/to-do-manger-backup.md' };

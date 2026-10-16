@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "node scripts/dev.mjs",
-    "build": "node --check api/notes.js",
-    "test": "node tests/notes-api.mjs && node tests/save-behavior.cjs"
+    "build": "node --check api/notes.js && node --check api/session.js && node --check lib/auth.js",
+    "test": "node tests/session-api.mjs && node tests/notes-api.mjs && node tests/save-behavior.cjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.0.0"
