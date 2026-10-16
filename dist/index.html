@@ -1,0 +1,403 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>To-Do Manager</title><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E"><style>      .preview {
+        font-size: 16px;
+        line-height: 1.8;
+        overflow-wrap: anywhere;
+      }
+      .preview > :first-child {
+        margin-top: 0;
+      }
+      .preview h1,
+      .preview h2,
+      .preview h3,
+      .preview h4,
+      .preview h5,
+      .preview h6 {
+        line-height: 1.35;
+        margin: 1.3em 0 0.5em;
+        letter-spacing: -0.5px;
+      }
+      .preview h1 {
+        font-size: 30px;
+      }
+      .preview h2 {
+        font-size: 24px;
+      }
+      .preview h3 {
+        font-size: 20px;
+      }
+      .preview p {
+        margin: 0 0 12px;
+      }
+      .preview ul,
+      .preview ol {
+        padding-left: 24px;
+        margin: 10px 0;
+      }
+      .preview li {
+        padding: 2px 0;
+      }
+      .preview blockquote {
+        border-left: 3px solid #37352f;
+        margin: 14px 0;
+        padding: 0 16px;
+        color: #787774;
+      }
+      .preview pre {
+        background: #f7f6f3;
+        border-radius: 6px;
+        padding: 16px;
+        overflow: auto;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .preview code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        background: #f3f2ef;
+        border-radius: 3px;
+        padding: 2px 5px;
+        font-size: 0.86em;
+        color: #b65050;
+      }
+      .preview pre code {
+        background: none;
+        color: inherit;
+        padding: 0;
+      }
+      .preview a {
+        color: inherit;
+        text-decoration-color: #aaa8a2;
+        text-underline-offset: 3px;
+      }
+      .preview hr {
+        border: 0;
+        border-top: 1px solid #e9e9e6;
+        margin: 24px 0;
+      }
+      .preview .task {
+        list-style: none;
+        margin-left: -23px;
+        display: block;
+      }
+      .task input {
+        margin-right: 10px;
+        accent-color: #787774;
+      }
+      .task input:checked + span {
+        color: #a5a39d;
+        text-decoration: line-through;
+      }
+      .empty {
+        color: #b2b0aa;
+        font-size: 15px;
+      }
+
+*{box-sizing:border-box}body{margin:0;color:#37352f;background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,textarea,input{font:inherit}header{height:64px;border-bottom:1px solid #efeeeb;padding:0 32px;display:flex;justify-content:space-between;align-items:center;gap:16px}.brand{font-size:14px;font-weight:500}.actions{display:flex;align-items:center;gap:18px}#status{font-size:12px;color:#9b9a97}button{cursor:pointer}.quiet{border:0;background:none;color:#787774;padding:7px}main{max-width:1800px;margin:36px auto;padding:0 48px}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid #e9e9e6}.tabs,.period-selector{display:inline-flex;gap:2px;background:#f5f5f3;padding:3px;border-radius:7px;border:0;margin:0}.period-selector{margin-left:auto;flex-wrap:wrap}.tabs button,.period-selector span{display:block;border:0;background:none;border-radius:5px;padding:6px 12px;font-size:12px;color:#787774}.period-selector label{position:relative;cursor:pointer}.period-selector input{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}.tabs button[aria-pressed=true],.period-selector input:checked+span{background:#fff;color:#37352f;box-shadow:0 1px 3px #00000012}button:focus-visible,textarea:focus-visible,.preview:focus-visible,.period-selector input:focus-visible+span{outline:2px solid #9b9a97;outline-offset:4px}.chores{margin-top:26px;padding-top:26px;border-top:1px solid #e9e9e6}.column-title{font-size:16px;font-weight:600;margin:0 0 20px}.workspace{display:grid;grid-template-columns:repeat(var(--column-count,2),minmax(0,1fr));gap:24px;padding-top:26px}.note-column{min-width:0}.note-column+.note-column{border-left:1px solid #eeedea;padding-left:24px}[data-group=short] [data-period=monthly],[data-group=daily] [data-period=daily]{border-left:0;padding-left:0}[hidden]{display:none!important}textarea,.preview{display:block;width:100%;height:clamp(260px,50dvh,700px);min-height:0;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-gutter:stable;padding:0 8px 0 0;font-size:14px}.chores textarea,.chores .preview{height:clamp(150px,22dvh,260px)}textarea{resize:none;border:0;background:transparent;color:#57554f;line-height:1.85;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;tab-size:2}textarea::placeholder{color:#b2b0aa}main[data-mode=write] .preview-pane,main[data-mode=read] .editor-pane{display:none}footer{border-top:1px solid #efeeeb;margin-top:30px;padding:16px 0;font-size:12px;color:#aaa8a2;display:flex;justify-content:space-between}@media(max-width:600px){header{padding:0 20px}.actions{gap:8px}main{padding:0 24px}.workspace{grid-template-columns:1fr}.note-column+.note-column{border-left:0;border-top:1px solid #eeedea;padding:24px 0 0}}
+
+main:has(.workspace[data-group=daily]){max-width:none}
+.workspace[data-group=daily]{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(320px,1fr);overflow-x:auto;padding-bottom:16px;scroll-snap-type:x proximity;scroll-padding-inline:0}
+.workspace[data-group=daily] .note-column{border:0;padding:0;scroll-snap-align:start}
+@media(max-width:600px){.workspace[data-group=daily]{grid-auto-columns:min(360px,100%)}}
+
+@media(max-width:760px){header{height:auto;min-height:64px;flex-wrap:wrap;padding-block:12px}.actions{flex-wrap:wrap;gap:8px}}
+#token-dialog{width:min(420px,calc(100% - 32px));padding:24px;border:1px solid #e9e9e6;border-radius:10px;color:inherit}
+#token-dialog::backdrop{background:#0005}
+#token-dialog h2{font-size:20px;margin-top:0}
+#token-dialog label{display:block;margin-bottom:8px}
+#notes-token{width:100%;padding:10px;border:1px solid #d5d4d0;border-radius:6px}
+#token-message{font-size:14px;line-height:1.6}
+.token-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+.token-actions button{padding:8px 14px;border:1px solid #d5d4d0;border-radius:6px;background:#f5f5f3;color:inherit}
+</style></head><body><header><div class="brand">▤ My workspace</div><div class="actions"><span id="status" role="status">No file loaded</span><button class="quiet" id="r2-open">Reload from R2</button><button class="quiet" id="r2-save" hidden>Save to R2 ⌥S</button><button class="quiet" id="download">Export .md ↗</button></div></header><main data-mode="write"><div id="initial-load-notice" hidden><span id="initial-load-message" role="status"></span> <button class="quiet" id="initial-load-retry">Retry loading</button></div><div class="toolbar"><div class="tabs" role="group" aria-label="Note view"><button data-mode="write" aria-pressed="true">Write</button><button data-mode="read" aria-pressed="false">Read</button></div><fieldset class="period-selector" aria-label="Visible planning periods"><label><input type="radio" name="period-group" value="long"><span>Long term</span></label><label><input type="radio" name="period-group" value="short"><span>Mid term</span></label><label><input type="radio" name="period-group" value="daily" checked><span>Daily</span></label></fieldset></div><div class="workspace" id="workspace" data-group="daily"><section class="note-column" data-period="annual" aria-labelledby="heading-annual" hidden><h2 class="column-title" id="heading-annual">Annual</h2><div class="editor-pane"><textarea id="editor-annual" aria-label="Annual notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-annual" aria-label="Formatted annual notes"></article></div></section><section class="note-column" data-period="quarterly" aria-labelledby="heading-quarterly" hidden><h2 class="column-title" id="heading-quarterly">Quarterly</h2><div class="editor-pane"><textarea id="editor-quarterly" aria-label="Quarterly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-quarterly" aria-label="Formatted quarterly notes"></article></div></section><section class="note-column" data-period="monthly" aria-labelledby="heading-monthly" hidden><h2 class="column-title" id="heading-monthly">Monthly</h2><div class="editor-pane"><textarea id="editor-monthly" aria-label="Monthly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-monthly" aria-label="Formatted monthly notes"></article></div></section><section class="note-column" data-period="weekly" aria-labelledby="heading-weekly" hidden><h2 class="column-title" id="heading-weekly">Weekly</h2><div class="editor-pane"><textarea id="editor-weekly" aria-label="Weekly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-weekly" aria-label="Formatted weekly notes"></article></div></section><section class="note-column" data-period="daily" aria-labelledby="heading-daily"><h2 class="column-title" id="heading-daily">Monday</h2><div class="editor-pane"><textarea id="editor-daily" aria-label="Monday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-daily" aria-label="Formatted monday notes"></article></div></section><section class="note-column" data-period="tuesday" aria-labelledby="heading-tuesday"><h2 class="column-title" id="heading-tuesday">Tuesday</h2><div class="editor-pane"><textarea id="editor-tuesday" aria-label="Tuesday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-tuesday" aria-label="Formatted tuesday notes"></article></div></section><section class="note-column" data-period="wednesday" aria-labelledby="heading-wednesday"><h2 class="column-title" id="heading-wednesday">Wednesday</h2><div class="editor-pane"><textarea id="editor-wednesday" aria-label="Wednesday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-wednesday" aria-label="Formatted wednesday notes"></article></div></section><section class="note-column" data-period="thursday" aria-labelledby="heading-thursday"><h2 class="column-title" id="heading-thursday">Thursday</h2><div class="editor-pane"><textarea id="editor-thursday" aria-label="Thursday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-thursday" aria-label="Formatted thursday notes"></article></div></section><section class="note-column" data-period="friday" aria-labelledby="heading-friday"><h2 class="column-title" id="heading-friday">Friday</h2><div class="editor-pane"><textarea id="editor-friday" aria-label="Friday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-friday" aria-label="Formatted friday notes"></article></div></section><section class="note-column" data-period="saturday" aria-labelledby="heading-saturday"><h2 class="column-title" id="heading-saturday">Saturday</h2><div class="editor-pane"><textarea id="editor-saturday" aria-label="Saturday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-saturday" aria-label="Formatted saturday notes"></article></div></section><section class="note-column" data-period="sunday" aria-labelledby="heading-sunday"><h2 class="column-title" id="heading-sunday">Sunday</h2><div class="editor-pane"><textarea id="editor-sunday" aria-label="Sunday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-sunday" aria-label="Formatted sunday notes"></article></div></section></div><section class="chores" data-period="chores" aria-labelledby="heading-chores"><h2 class="column-title" id="heading-chores">Chores</h2><div class="editor-pane"><textarea id="editor-chores" aria-label="Chores notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-chores" aria-label="Formatted chores notes"></article></div></section><footer><span id="words">0 words</span><span>Option + S (Alt + S): save to R2 · Cmd/Ctrl + S also works.</span></footer></main>
+<dialog id="token-dialog" aria-labelledby="token-title">
+  <form id="token-form">
+    <h2 id="token-title">Authorize saving</h2>
+    <label for="notes-token">NOTES_TOKEN</label>
+    <input id="notes-token" type="password" required autocomplete="off" autofocus>
+    <p id="token-message" role="status">Enter the NOTES_TOKEN configured for this app. It stays only in this tab.</p>
+    <div class="token-actions"><button id="token-cancel" type="button">Cancel</button><button id="token-submit" type="submit">Save to R2</button></div>
+  </form>
+</dialog>
+<script>
+const periods=["chores","annual","quarterly","monthly","weekly","daily","tuesday","wednesday","thursday","friday","saturday","sunday"];
+const editors=Object.fromEntries(periods.map(key=>[key,document.querySelector('#editor-'+key)]));
+const previews=Object.fromEntries(periods.map(key=>[key,document.querySelector('#preview-'+key)]));
+const status=document.querySelector('#status'),workspace=document.querySelector('#workspace');
+      const escapeHTML = (s) =>
+        s
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      function inline(text) {
+        const tokens = [];
+        const hold = (html) => "\u0000" + (tokens.push(html) - 1) + "\u0000";
+        let value = escapeHTML(text).replace(/`([^`]+)`/g, (_, code) =>
+          hold("<code>" + code + "</code>"),
+        );
+        value = value.replace(
+          /\[([^\]\n]+)\]\(([^\s)]+)\)/g,
+          (_, label, url) => {
+            if (!/^(https?:\/\/|mailto:)/i.test(url)) return label;
+            return hold(
+              '<a href="' +
+                url +
+                '" target="_blank" rel="noopener noreferrer">' +
+                label +
+                "</a>",
+            );
+          },
+        );
+        value = value
+          .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+          .replace(/__(.+?)__/g, "<strong>$1</strong>")
+          .replace(/\*([^*]+)\*/g, "<em>$1</em>")
+          .replace(/(^|\s)_([^_]+)_(?=\s|$)/g, "$1<em>$2</em>")
+          .replace(/~~(.+?)~~/g, "<del>$1</del>");
+        return value.replace(/\u0000(\d+)\u0000/g, (_, n) => tokens[Number(n)]);
+      }
+      function renderMarkdown(source) {
+        const lines = source.replace(/\r/g, "").split("\n");
+        let html = "",
+          lists = [],
+          code = null,
+          paragraph = [];
+        const flushParagraph = () => {
+          if (paragraph.length) {
+            html += "<p>" + paragraph.map(inline).join("<br>") + "</p>";
+            paragraph = [];
+          }
+        };
+        const closeListLevel = () => {
+          const list = lists.pop();
+          html += "</li></" + list.kind + ">";
+        };
+        const closeList = () => {
+          while (lists.length) closeListLevel();
+        };
+        lines.forEach((line, index) => {
+          if (code !== null) {
+            if (/^\s*```/.test(line)) {
+              html +=
+                "<pre><code>" + escapeHTML(code.join("\n")) + "</code></pre>";
+              code = null;
+            } else code.push(line);
+            return;
+          }
+          if (/^\s*```/.test(line)) {
+            flushParagraph();
+            closeList();
+            code = [];
+            return;
+          }
+          if (!line.trim()) {
+            flushParagraph();
+            const next = lines.slice(index + 1).find(line => line.trim());
+            if (!next || !/^\s*(?:[-*+]\s+|\d+[.)]\s+)/.test(next)) closeList();
+            return;
+          }
+          const heading = line.match(/^(#{1,6})\s+(.+)$/),
+            item = line.match(/^(\s*)(?:[-*+]\s+|(\d+)[.)]\s+)(.*)$/);
+          if (heading) {
+            flushParagraph();
+            closeList();
+            const n = heading[1].length;
+            html += "<h" + n + ">" + inline(heading[2]) + "</h" + n + ">";
+            return;
+          }
+          if (/^\s*(---+|\*\*\*+)\s*$/.test(line)) {
+            flushParagraph();
+            closeList();
+            html += "<hr>";
+            return;
+          }
+          if (/^>\s?/.test(line)) {
+            flushParagraph();
+            closeList();
+            html +=
+              "<blockquote>" +
+              inline(line.replace(/^>\s?/, "")) +
+              "</blockquote>";
+            return;
+          }
+          if (item) {
+            flushParagraph();
+            const indent = item[1].replace(/\t/g, "    ").length;
+            const kind = item[2] ? "ol" : "ul";
+            while (lists.length && lists[lists.length - 1].indent > indent) {
+              closeListLevel();
+            }
+            let current = lists[lists.length - 1];
+            if (current && current.indent === indent && current.kind !== kind) {
+              closeListLevel();
+              current = lists[lists.length - 1];
+            }
+            if (!current || indent > current.indent) {
+              html += "<" + kind + (kind === "ol" && Number(item[2]) !== 1
+                ? ' start="' + Number(item[2]) + '"' : "") + ">";
+              lists.push({ kind, indent });
+            } else {
+              html += "</li>";
+            }
+            const task = item[3].match(/^\[([ xX])\]\s+(.*)$/);
+            html += task
+              ? '<li class="task"><input type="checkbox" data-line="' +
+                index +
+                '" aria-label="' +
+                escapeHTML(task[2]) +
+                '" ' +
+                (task[1] !== " " ? "checked" : "") +
+                "><span>" +
+                inline(task[2]) +
+                "</span>"
+              : "<li>" + inline(item[3]);
+            return;
+          }
+          if (lists.length && /^\s+/.test(line) &&
+              line.match(/^\s*/)[0].replace(/\t/g, "    ").length > lists[lists.length - 1].indent) {
+            html += "<br>" + inline(line.trim());
+            return;
+          }
+          closeList();
+          paragraph.push(line);
+        });
+        flushParagraph();
+        closeList();
+        if (code !== null)
+          html += "<pre><code>" + escapeHTML(code.join("\n")) + "</code></pre>";
+        return html;
+      }
+
+function render(){let count=0;for(const key of periods){const text=editors[key].value;previews[key].innerHTML=text.trim()?renderMarkdown(text):'<p class="empty">No notes yet.</p>';count+=text.trim()?text.trim().split(/\s+/).length:0;}document.querySelector('#words').textContent=count+' '+(count===1?'word':'words');}
+let savedSnapshot=JSON.stringify(noteSnapshot());
+let savedLabel='No file loaded';
+function hasUnsavedChanges(){return JSON.stringify(noteSnapshot())!==savedSnapshot;}
+function updateSaveStatus(){status.textContent=hasUnsavedChanges()?'Unsaved changes':savedLabel;}
+function change(){render();updateSaveStatus();}
+for(const key of periods){editors[key].addEventListener('input',change);previews[key].addEventListener('change',event=>{const checkbox=event.target;if(!checkbox.matches('input[data-line]'))return;const lines=editors[key].value.split('\n'),i=Number(checkbox.dataset.line);if(!Number.isInteger(i)||i<0||i>=lines.length)return;lines[i]=lines[i].replace(/^(\s*[-*+]\s+|\s*\d+[.)]\s+)\[[ xX]\]/,(_,prefix)=>prefix+'['+(checkbox.checked?'x':' ')+']');editors[key].value=lines.join('\n');change();});}
+document.querySelectorAll('input[name="period-group"]').forEach(radio=>radio.addEventListener('change',()=>{if(!radio.checked)return;workspace.dataset.group=radio.value;const visible={long:['annual','quarterly'],short:['monthly','weekly'],daily:['daily','tuesday','wednesday','thursday','friday','saturday','sunday']}[radio.value];workspace.style.setProperty('--column-count',visible.length);document.querySelectorAll('.note-column').forEach(column=>column.hidden=!visible.includes(column.dataset.period));}));
+document.querySelectorAll('.tabs button').forEach(button=>button.addEventListener('click',()=>{document.querySelector('main').dataset.mode=button.dataset.mode;document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));}));
+function noteSnapshot(){return Object.fromEntries(periods.map(key=>[key,editors[key].value]));}
+function markdownBackup(){
+  const notes=noteSnapshot();
+  const body=periods.map(key=>'# '+(key==='daily'?'Monday':key[0].toUpperCase()+key.slice(1))+'\n\n'+notes[key]).join('\n\n');
+  // Store exact panel boundaries for lossless re-import, even when notes contain headings.
+  return body+'\n\n<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringify(notes))+' -->\n';
+}
+document.querySelector('#download').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([markdownBackup()],{type:'text/markdown;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='notes.md';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);if(hasUnsavedChanges())status.textContent='Download started · save to R2 to confirm saving';});
+function parseMarkdownBackup(source){
+  const text=source.replace(/\r\n/g,'\n');
+  const marker=text.match(/<!-- todo-manager-backup-v1:(.*?) -->\s*$/);
+    let notes;
+    if(marker){
+      notes=JSON.parse(decodeURIComponent(marker[1]));
+      if(!notes||typeof notes!=='object'||periods.some(key=>typeof notes[key]!=='string'))throw new Error('This backup is missing panel data.');
+    }else{
+      // Support the older export format in its original panel order.
+      notes={};let offset=0;
+      for(let i=0;i<periods.length;i++){
+        const label=key=>key==='daily'?'Monday':key[0].toUpperCase()+key.slice(1);
+        const heading='# '+label(periods[i])+'\n\n';
+        if(!text.startsWith(heading,offset))throw new Error('Use a Markdown file exported by this app.');
+        const start=offset+heading.length;
+        const next=i+1<periods.length?text.indexOf('\n\n# '+label(periods[i+1])+'\n\n',start):-1;
+        if(i+1<periods.length&&next<0)throw new Error('This export is missing a panel.');
+        notes[periods[i]]=text.slice(start,next<0?text.length:next);
+        offset=next+2;
+      }
+    }
+  return notes;
+}
+function loadNotes(notes,label){
+  if(r2Pending)throw new Error('Wait for the current save to finish before loading notes.');
+  if(periods.some(key=>editors[key].value.trim())&&!confirm('Replace all current panels with the notes from this backup? Export first if you want to keep the current notes.'))return false;
+  for(const key of periods)editors[key].value=notes[key];
+  savedSnapshot=JSON.stringify(noteSnapshot());savedLabel=label;
+  render();updateSaveStatus();return true;
+}
+const r2SaveButton=document.querySelector('#r2-save');
+let r2Connection=null,r2Pending=false,initialLoading=false,notesToken='';
+const tokenDialog=document.querySelector('#token-dialog'),tokenInput=document.querySelector('#notes-token'),tokenMessage=document.querySelector('#token-message');
+function askForToken(){if(!tokenDialog.open)tokenDialog.showModal();}
+document.querySelector('#token-cancel').addEventListener('click',()=>tokenDialog.close());
+document.querySelector('#token-form').addEventListener('submit',async event=>{
+  event.preventDefault();
+  if(r2Pending)return;
+  notesToken=tokenInput.value.trim();
+  if(!notesToken)return;
+  tokenInput.value='';
+  await saveR2();
+});
+async function saveR2(){
+  if(!r2Connection||r2Pending||initialLoading)return;
+  if(!notesToken){askForToken();return;}
+  const connection=r2Connection,snapshot=JSON.stringify(noteSnapshot()),content=markdownBackup();
+  r2Pending=true;r2SaveButton.disabled=true;status.textContent='Saving to R2…';
+  try{
+    const response=await fetch(connection.endpoint,{method:'PUT',headers:{Authorization:'Bearer '+notesToken,'Content-Type':'text/markdown; charset=utf-8','If-Match':connection.etag},body:content});
+    if(!response.ok){
+      const message=await response.text();
+      if(response.status===401){notesToken='';tokenMessage.textContent=message;askForToken();}
+      throw new Error(message);
+    }
+    const etag=response.headers.get('ETag');
+    if(!etag)throw new Error('Save could not be confirmed. Reconnect to R2 before saving again.');
+    connection.etag=etag;savedSnapshot=snapshot;savedLabel='Saved to R2';
+    initialNotice.hidden=true;tokenDialog.close();tokenMessage.textContent='Enter the NOTES_TOKEN configured for this app. It stays only in this tab.';
+  }catch(error){initialMessage.textContent=error.message||'Could not save to R2.';initialNotice.hidden=false;}
+  finally{r2Pending=false;r2SaveButton.disabled=false;updateSaveStatus();}
+}
+r2SaveButton.addEventListener('click',saveR2);
+
+const initialNotice=document.querySelector('#initial-load-notice'),initialMessage=document.querySelector('#initial-load-message');
+async function loadInitialNotes(){
+  if(initialLoading||r2Pending)return;
+  initialLoading=true;
+  const before=JSON.stringify(noteSnapshot());
+  for(const editor of Object.values(editors))editor.disabled=true;
+  document.querySelector('#r2-open').disabled=true;
+  document.querySelector('#initial-load-retry').disabled=true;
+  initialNotice.hidden=true;status.textContent='Loading notes…';
+  try{
+    if(location.protocol==='file:')throw new Error('Run npm run dev or open the deployed app to load R2_PUBLIC_URL from your environment.');
+    const url='/api/notes?source=public';
+    const response=await fetch(url,{cache:'no-store'});
+    if(!response.ok)throw new Error(await response.text());
+    const etag=response.headers.get('ETag');
+    if(!etag)throw new Error('The Markdown source must return an ETag header to enable saving.');
+    const notes=parseMarkdownBackup(await response.text());
+    if(before!==JSON.stringify(noteSnapshot()))throw new Error('Your edits were kept. Export them before retrying the initial load.');
+    if(loadNotes(notes,'Loaded from R2 Markdown URL')){
+      r2Connection={endpoint:'/api/notes',etag};r2SaveButton.hidden=false;
+    }else updateSaveStatus();
+  }catch(error){
+    initialNotice.hidden=false;
+    initialMessage.textContent='Could not load initial notes. '+(error.message||'Please try again.');
+    savedLabel='Initial load failed';updateSaveStatus();
+  }finally{
+    initialLoading=false;
+    for(const editor of Object.values(editors))editor.disabled=false;
+    document.querySelector('#r2-open').disabled=false;
+    document.querySelector('#initial-load-retry').disabled=false;
+  }
+}
+document.querySelector('#initial-load-retry').addEventListener('click',loadInitialNotes);
+document.querySelector('#r2-open').addEventListener('click',loadInitialNotes);
+
+document.addEventListener('keydown',event=>{
+  const optionSave=event.altKey&&!event.metaKey&&!event.ctrlKey&&(event.code==='KeyS'||event.key.toLowerCase()==='s');
+  const commandSave=(event.metaKey||event.ctrlKey)&&!event.altKey&&event.key.toLowerCase()==='s';
+  if(!optionSave&&!commandSave)return;
+  event.preventDefault();
+  if(event.repeat||r2Pending||initialLoading)return;
+  if(r2Connection){saveR2();return;}
+  loadInitialNotes();
+});
+window.addEventListener('beforeunload',event=>{
+  if(!hasUnsavedChanges())return;
+  event.preventDefault();
+  event.returnValue='';
+});
+render();updateSaveStatus();
+const initialLoadPromise=loadInitialNotes();
+</script></body></html>
