@@ -89,6 +89,21 @@ const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringif
   duplicate('one\ntwo',0,0,'ArrowUp','one\none\ntwo',0);duplicate('',0,0,'ArrowDown','\n',1);
   duplicate('\nnext',0,0,'ArrowUp','\n\nnext',0);duplicate('one\ntwo\nthree',0,8,'ArrowDown','one\ntwo\none\ntwo\nthree',8,16);
   duplicate('one\ntwo\nthree',1,6,'ArrowUp','one\ntwo\none\ntwo\nthree',1,6);
+  function indent(input,start,end,shift,expected,newStart,newEnd=newStart){
+    const editor=node('#editor-daily');editor.value=input;editor.setSelectionRange(start,end,'forward');let prevented=false;
+    editor.events.keydown({key:'Tab',shiftKey:shift,preventDefault(){prevented=true;}});
+    assert(prevented);assert.equal(editor.value,expected);assert.equal(editor.selectionStart,newStart);assert.equal(editor.selectionEnd,newEnd);
+  }
+  indent('- Parent\n- Child',9,9,false,'- Parent\n  - Child',11);
+  assert(node('#preview-daily').innerHTML.includes('<ul><li>Child'));
+  indent('one\ntwo\nthree',0,8,false,'  one\n  two\nthree',2,12);
+  indent('  one\n  two\nthree',2,12,true,'one\ntwo\nthree',0,8);
+  indent('  - Child',5,5,true,'- Child',3);
+  indent(' - Child',1,1,true,'- Child',0);
+  indent('\t- Child',1,1,true,'- Child',0);
+  indent('one',1,1,true,'one',1);
+  indent('',0,0,false,'  ',2);
+  assert(isDirty());assert(leaving());
   const unchanged=node('#editor-daily').value;
   node('#editor-daily').events.keydown({altKey:false,key:'ArrowDown',preventDefault(){throw new Error('Normal arrows must remain unchanged');}});
   assert.equal(node('#editor-daily').value,unchanged);

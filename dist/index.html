@@ -426,6 +426,32 @@ logoutButton.addEventListener('click',async()=>{
 
 // Duplicate the current line, or selected complete lines, in the editor that has focus.
 for(const editor of Object.values(editors))editor.addEventListener('keydown',event=>{
+  if(editor.disabled||editor.readOnly||event.isComposing)return;
+  if(event.key==='Tab'&&!event.altKey&&!event.ctrlKey&&!event.metaKey){
+    event.preventDefault();
+    const text=editor.value,start=editor.selectionStart,end=editor.selectionEnd;
+    const direction=editor.selectionDirection,top=editor.scrollTop,left=editor.scrollLeft;
+    if(start===end&&!event.shiftKey){
+      editor.setRangeText('  ',start,end,'preserve');
+      editor.setSelectionRange(start+2,start+2,direction);
+    }else{
+      const first=start===0?0:text.lastIndexOf('\n',start-1)+1;
+      const next=text.indexOf('\n',end>start?end-1:end);
+      const last=next<0?text.length:next;
+      const edits=[];let offset=first;
+      const block=text.slice(first,last).split('\n').map(line=>{
+        const removed=event.shiftKey?(line.match(/^(?:\t| {1,2})/)?.[0].length||0):0;
+        const inserted=event.shiftKey?'':'  ';
+        edits.push({at:offset,removed,added:inserted.length});offset+=line.length+1;
+        return inserted+line.slice(removed);
+      }).join('\n');
+      if(block===text.slice(first,last))return;
+      const move=position=>position+edits.reduce((delta,edit)=>delta+(position>=edit.at?edit.added-Math.min(edit.removed,position-edit.at):0),0);
+      editor.setRangeText(block,first,last,'preserve');
+      editor.setSelectionRange(move(start),move(end),direction);
+    }
+    editor.scrollTop=top;editor.scrollLeft=left;change();return;
+  }
   if(!event.altKey||event.metaKey||event.ctrlKey||event.isComposing||editor.disabled||editor.readOnly)return;
   if(event.key!=='ArrowUp'&&event.key!=='ArrowDown')return;
   event.preventDefault();
