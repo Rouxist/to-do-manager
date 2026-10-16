@@ -2,8 +2,9 @@ import { configured, authorization, sameOrigin } from '../lib/auth.js';
 import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 
 const LIMIT = 2 * 1024 * 1024;
-const PERIODS = ['chores', 'annual', 'quarterly', 'monthly', 'weekly', 'daily', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+const PERIODS = ['chores', 'annual', 'quarterly', 'monthly', 'weekly', 'daily', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'research'];
 const headers = { 'Cache-Control': 'no-store', 'Content-Type': 'text/plain; charset=utf-8' };
+const versionHeaders = etag => etag && /^"[^"\r\n]+"$/.test(etag) ? { ETag: etag, 'X-R2-Version': etag } : {};
 const reply = (message, status, extra = {}) => new Response(message, { status, headers: { ...headers, ...extra } });
 
 function clientFor(env) {
@@ -38,7 +39,7 @@ export function createNotesHandler({ env = process.env, clientFactory = clientFo
         if (Number(response.headers.get('Content-Length')) > LIMIT) return reply('Backup exceeds 2 MB.', 413);
         const content = await response.text();
         if (Buffer.byteLength(content) > LIMIT) return reply('Backup exceeds 2 MB.', 413);
-        return reply(content, 200, { 'Content-Type': 'text/markdown; charset=utf-8', ...(response.headers.get('ETag') ? { ETag: response.headers.get('ETag') } : {}) });
+        return reply(content, 200, { 'Content-Type': 'text/markdown; charset=utf-8', ...versionHeaders(response.headers.get('ETag')) });
       } catch {
         return reply('Could not reach the public Markdown file. Please try again.', 502);
       }
@@ -53,10 +54,10 @@ export function createNotesHandler({ env = process.env, clientFactory = clientFo
         if (object.ContentLength > LIMIT) return reply('Backup exceeds 2 MB.', 413);
         const content = await object.Body.transformToString('utf-8');
         if (Buffer.byteLength(content) > LIMIT) return reply('Backup exceeds 2 MB.', 413);
-        return reply(content, 200, { 'Content-Type': 'text/markdown; charset=utf-8', ETag: object.ETag });
+        return reply(content, 200, { 'Content-Type': 'text/markdown; charset=utf-8', ...versionHeaders(object.ETag) });
       }
       const etag = request.headers.get('If-Match');
-      if (!etag || !/^"[^"\r\n]+"$/.test(etag)) return reply('Load the current R2 file before saving.', 428);
+      if (!etag || !/^"[^"\r\n]+"$/.test(etag)) return reply('Missing a valid R2 file version. Export your edits, then reload the app before saving.', 428);
       if (!request.headers.get('Content-Type')?.startsWith('text/markdown')) return reply('Expected Markdown.', 415);
       if (Number(request.headers.get('Content-Length')) > LIMIT) return reply('Backup exceeds 2 MB.', 413);
       const content = await request.text();
@@ -64,14 +65,14 @@ export function createNotesHandler({ env = process.env, clientFactory = clientFo
       try {
         const marker = content.match(/<!-- todo-manager-backup-v1:(.*?) -->\s*$/);
         const notes = JSON.parse(decodeURIComponent(marker?.[1] || ''));
-        if (!notes || PERIODS.some(key => typeof notes[key] !== 'string')) throw new Error('Missing panel');
+        if (!notes || PERIODS.some(key => key === 'research' && notes[key] === undefined ? false : typeof notes[key] !== 'string')) throw new Error('Missing panel');
       } catch {
         return reply('Expected a valid all-panel Markdown backup from this app.', 400);
       }
       const result = await client.send(new PutObjectCommand({
         ...target, Body: content, ContentType: 'text/markdown; charset=utf-8', CacheControl: 'no-cache', IfMatch: etag,
       }));
-      return reply('Saved to R2.', 200, { ETag: result.ETag });
+      return reply('Saved to R2.', 200, versionHeaders(result.ETag));
     } catch (error) {
       const code = error.$metadata?.httpStatusCode;
       if (code === 404 || error.name === 'NoSuchKey') return reply('Markdown file not found in R2. Check R2_BUCKET and R2_OBJECT_KEY.', 404);

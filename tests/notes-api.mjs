@@ -30,11 +30,13 @@ assert.equal((await createNotesHandler({env:{}})(new Request('https://app.exampl
 let response = await call('GET', auth);
 assert.equal(response.status, 200); assert.equal(await response.text(), content);
 assert.equal(response.headers.get('ETag'), '"initial"');
+assert.equal(response.headers.get('X-R2-Version'),'"initial"');
 assert.equal(response.headers.get('Cache-Control'), 'no-store');
 const headers = { ...auth, 'Content-Type': 'text/markdown', 'If-Match': '"initial"' };
 response = await call('PUT', headers, content);
 assert.equal(response.status, 200); assert.equal(writes, 1);
 assert.equal(response.headers.get('ETag'), '"saved-1"');
+assert.equal(response.headers.get('X-R2-Version'),'"saved-1"');
 assert.equal((await call('PUT', headers, content)).status, 412);
 assert.equal(writes, 1, 'A stale save must not overwrite newer content');
 assert.equal((await call('PUT', { ...headers, 'If-Match': '*' }, content)).status, 428);
@@ -67,3 +69,19 @@ publicRequest=null;
 assert.equal((await publicHandler(new Request('https://app.example/api/notes?source=public'))).status,401);
 assert.equal((await publicHandler(new Request('https://app.example/api/notes?source=public',{headers:{Authorization:'Bearer incorrect'}}))).status,401);
 assert.equal(publicRequest,null,'Unauthorized reads must never fetch the Markdown source');
+
+// New exports persist Research; older backups remain accepted.
+failure=undefined;
+const withResearch={...notes,research:'## Sources\n- 📚 Reading list'};
+const researchBackup='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringify(withResearch))+' -->';
+response=await call('PUT',{...auth,'Content-Type':'text/markdown','If-Match':etag},researchBackup);
+assert.equal(response.status,200);assert.equal(stored,researchBackup);
+
+assert.equal((await call('PUT',{...auth,'Content-Type':'text/markdown','If-Match':'W/'+etag},researchBackup)).status,428);
+const secondRead=await call('GET',auth);
+// Simulate a CDN weakening the page ETag while preserving the opaque R2 version.
+const transportedVersion=secondRead.headers.get('X-R2-Version');
+const nextSave=await call('PUT',{...auth,'Content-Type':'text/markdown','If-Match':transportedVersion},researchBackup);
+assert.equal(nextSave.status,200);
+assert.equal((await call('PUT',{...auth,'Content-Type':'text/markdown','If-Match':transportedVersion},researchBackup)).status,412);
+console.log('Passed independent R2 version transport, consecutive saves, and stale-version rejection.');

@@ -27,7 +27,7 @@ function createApp(){
   return {node,nodes,context,requests,documentEvents,windowEvents,get downloads(){return downloads;},get latest(){return requests.at(-1);}};
 }
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
-const response=(status=200,text='',etag='"initial"')=>({ok:status>=200&&status<300,status,text:async()=>text,headers:{get(name){return name.toLowerCase()==='etag'?etag:null;}}});
+const response=(status=200,text='',etag='"initial"')=>({ok:status>=200&&status<300,status,text:async()=>text,headers:{get(name){return name.toLowerCase()==='etag'?'W/'+etag:name.toLowerCase()==='x-r2-version'?etag:null;}}});
 const notes=Object.fromEntries(['chores','annual','quarterly','monthly','weekly','daily','tuesday','wednesday','thursday','friday','saturday','sunday'].map(key=>[key,'Remote '+key]));
 const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringify(notes))+' -->';
 (async()=>{
@@ -38,7 +38,7 @@ const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringif
   const shortcut=()=>{let prevented=false;app.documentEvents.keydown({key:'ß',code:'KeyS',altKey:true,preventDefault(){prevented=true;}});assert(prevented);};
   const submit=token=>{node('#notes-token').value=token;return node('#token-form').events.submit({preventDefault(){}});};
   assert(!app.nodes.has('#backup'));assert(!app.nodes.has('#import'));assert(!app.nodes.has('#import-file'));
-  assert.equal(app.latest.url,'/api/notes?source=public');assert.equal(app.latest.options.credentials,'same-origin');
+  assert.equal(app.latest.url,'/api/notes');assert.equal(app.latest.options.credentials,'same-origin');
   assert(!node('#token-dialog').open,'Try the existing cookie before prompting');
   app.latest.resolve(response(401,'Please sign in.'));await vm.runInContext('initialLoadPromise',context);
   assert(node('#token-dialog').open);assert(node('#editor-daily').disabled);assert.equal(node('#editor-daily').value,'');
@@ -46,12 +46,17 @@ const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringif
   app.latest.resolve(response(401,'Incorrect NOTES_TOKEN.'));await pending;
   assert(node('#token-dialog').open);assert(node('#editor-daily').disabled);
   pending=submit('correct-token');assert.equal(JSON.parse(app.latest.options.body).token,'correct-token');
-  app.latest.resolve(response());await tick();assert.equal(app.latest.url,'/api/notes?source=public');
+  app.latest.resolve(response());await tick();assert.equal(app.latest.url,'/api/notes');
   app.latest.resolve(response(200,remoteText));await pending;
-  assert.equal(node('#editor-daily').value,'Remote daily');assert(!node('#token-dialog').open);assert(!node('#logout').hidden);
+  assert.equal(node('#editor-research').value,'');assert.equal(node('#editor-daily').value,'Remote daily');assert(!node('#token-dialog').open);assert(!node('#logout').hidden);
   assert.equal(vm.runInContext('typeof notesToken',context),'undefined');assert(!isDirty());assert(!leaving());
   edit('change');assert(isDirty());assert(leaving());edit('Remote daily');assert(!isDirty());
-  edit('Save this to R2');shortcut();assert.equal(app.latest.options.method,'PUT');
+  node('#editor-research').value='## Research\n- 📚 Sources';node('#editor-research').events.input();
+  edit('Save this to R2');shortcut();
+  assert(app.latest.options.body.includes('# Research\n\n## Research'));
+  const exported=vm.runInContext('markdownBackup()',context);
+  assert.equal(vm.runInContext('parseMarkdownBackup('+JSON.stringify(exported)+').research',context),'## Research\n- 📚 Sources');
+  assert(node('#preview-research').innerHTML.includes('<h2>Research</h2>'));assert.equal(app.latest.options.method,'PUT');
   assert.equal(app.latest.options.headers.Authorization,undefined);assert.equal(app.latest.options.headers['If-Match'],'"initial"');
   assert(leaving());edit('Edited during save');app.latest.resolve(response());await tick();assert(isDirty());
   shortcut();app.latest.resolve(response(200,'','"newer"'));await tick();assert(!isDirty());assert(!leaving());
@@ -94,7 +99,7 @@ const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringif
   pending=node('#logout').click();assert.equal(app.latest.url,'/api/session');assert.equal(app.latest.options.method,'DELETE');
   app.latest.resolve(response());await pending;
   assert(node('#logout').hidden);assert(node('#token-dialog').open);assert(node('#editor-daily').disabled);assert(!isDirty());assert(!leaving());
-  for(const key of Object.keys(notes)){assert.equal(node('#editor-'+key).value,'');assert(!node('#preview-'+key).innerHTML.includes('Remote'));}
+  for(const key of [...Object.keys(notes),'research']){assert.equal(node('#editor-'+key).value,'');assert(!node('#preview-'+key).innerHTML.includes('Remote'));}
   const reopened=createApp();reopened.latest.resolve(response(200,remoteText));await vm.runInContext('initialLoadPromise',reopened.context);
   assert(!reopened.node('#token-dialog').open);assert.equal(reopened.requests.length,1,'A valid browser cookie should avoid logging in again');
   assert.equal(reopened.node('#editor-daily').value,'Remote daily');

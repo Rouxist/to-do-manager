@@ -44,3 +44,11 @@ npm run build
 ```
 
 For a manual browser check, enter the token, close and reopen the browser, then open the same app address. Notes should load without another prompt. After **Log out**, reopening should require the token again. Merely loading or logging out does not change the R2 file.
+
+Research appears to the right of Chores below the planning panels (stacked below on small screens). It supports Markdown and the same save/export and duplication shortcuts. Older backups load with Research empty; the next save includes it.
+
+## R2 file versions on Vercel
+
+The editor loads notes directly from the authenticated R2 API (`GET /api/notes`), using the same bucket and key as saving. The backend returns the storage ETag as `X-R2-Version` as well as the standard `ETag`. The editor uses `X-R2-Version` for conditional saves so intermediary compression or page-cache ETag changes do not affect R2 version checks. Stale versions still reject writes to protect newer notes.
+
+The protected `?source=public` endpoint remains available for compatibility, but the editor no longer uses it for initial loading. `R2_PUBLIC_URL` is no longer needed for the normal editor workflow. After deploying this fix, export any unsaved edits before refreshing the page; the refreshed app must load the new version header before saving.
