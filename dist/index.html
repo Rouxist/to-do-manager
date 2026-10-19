@@ -274,7 +274,44 @@ let savedSnapshot=JSON.stringify(noteSnapshot());
 let savedLabel='No file loaded';
 function hasUnsavedChanges(){return JSON.stringify(noteSnapshot())!==savedSnapshot;}
 function updateSaveStatus(){status.textContent=hasUnsavedChanges()?'Unsaved changes':savedLabel;}
-function change(){render();updateSaveStatus();}
+const editHistory=new Map();
+const editorState=editor=>({value:editor.value,start:editor.selectionStart,end:editor.selectionEnd,direction:editor.selectionDirection,top:editor.scrollTop,left:editor.scrollLeft});
+function resetEditHistory(){
+  for(const editor of Object.values(editors))editHistory.set(editor,{undo:[],redo:[],current:editorState(editor)});
+}
+function captureSelection(editor){
+  const history=editHistory.get(editor);
+  if(history.current.value===editor.value)history.current=editorState(editor);
+}
+function restoreEdit(editor,redo=false){
+  const history=editHistory.get(editor),source=redo?history.redo:history.undo;
+  if(!source.length)return;
+  (redo?history.undo:history.redo).push(editorState(editor));
+  const state=source.pop();
+  editor.value=state.value;
+  editor.setSelectionRange(state.start,state.end,state.direction);
+  editor.scrollTop=state.top;editor.scrollLeft=state.left;
+  history.current=editorState(editor);
+  render();updateSaveStatus();
+}
+resetEditHistory();
+for(const editor of Object.values(editors))editor.addEventListener('beforeinput',event=>{
+  if(editor.disabled||editor.readOnly)return;
+  if(event.inputType==='historyUndo'||event.inputType==='historyRedo'){
+    event.preventDefault();restoreEdit(editor,event.inputType==='historyRedo');return;
+  }
+  captureSelection(editor);
+});
+function change(){
+  for(const editor of Object.values(editors)){
+    const history=editHistory.get(editor);
+    if(history.current.value===editor.value)continue;
+    history.undo.push(history.current);
+    if(history.undo.length>200)history.undo.shift();
+    history.redo=[];history.current=editorState(editor);
+  }
+  render();updateSaveStatus();
+}
 for(const key of periods){editors[key].addEventListener('input',change);previews[key].addEventListener('change',event=>{const checkbox=event.target;if(loggingOut)return;if(!checkbox.matches('input[data-line]'))return;const lines=editors[key].value.split('\n'),i=Number(checkbox.dataset.line);if(!Number.isInteger(i)||i<0||i>=lines.length)return;lines[i]=lines[i].replace(/^(\s*[-*+]\s+|\s*\d+[.)]\s+)\[[ xX]\]/,(_,prefix)=>prefix+'['+(checkbox.checked?'x':' ')+']');editors[key].value=lines.join('\n');change();});}
 document.querySelectorAll('input[name="period-group"]').forEach(radio=>radio.addEventListener('change',()=>{if(!radio.checked)return;workspace.dataset.group=radio.value;const visible={long:['annual','quarterly'],short:['monthly','weekly'],daily:['daily','tuesday','wednesday','thursday','friday','saturday','sunday']}[radio.value];workspace.style.setProperty('--column-count',visible.length);document.querySelectorAll('.note-column').forEach(column=>column.hidden=!visible.includes(column.dataset.period));}));
 document.querySelectorAll('.tabs button').forEach(button=>button.addEventListener('click',()=>{document.querySelector('main').dataset.mode=button.dataset.mode;document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));}));
@@ -315,6 +352,7 @@ function loadNotes(notes,label){
   if(r2Pending)throw new Error('Wait for the current save to finish before loading notes.');
   if(periods.some(key=>editors[key].value.trim())&&!confirm('Replace all current panels with the notes from this backup? Export first if you want to keep the current notes.'))return false;
   for(const key of periods)editors[key].value=notes[key];
+  resetEditHistory();
   savedSnapshot=JSON.stringify(noteSnapshot());savedLabel=label;
   render();updateSaveStatus();return true;
 }
@@ -416,6 +454,7 @@ logoutButton.addEventListener('click',async()=>{
     const response=await fetch('/api/session',{method:'DELETE',credentials:'same-origin'});
     if(!response.ok)throw new Error(await response.text());
     for(const editor of Object.values(editors))editor.value='';
+    resetEditHistory();
     r2Connection=null;r2SaveButton.hidden=true;logoutButton.hidden=true;
     savedSnapshot=JSON.stringify(noteSnapshot());savedLabel='Signed out';
     initialNotice.hidden=true;tokenInput.value='';tokenMessage.textContent=loginExplanation;
@@ -424,9 +463,13 @@ logoutButton.addEventListener('click',async()=>{
   finally{loggingOut=false;logoutButton.disabled=false;for(const editor of Object.values(editors))editor.disabled=!r2Connection;}
 });
 
-// Duplicate the current line, or selected complete lines, in the editor that has focus.
+// Move lines with Option+Up/Down; add Shift to duplicate them.
 for(const editor of Object.values(editors))editor.addEventListener('keydown',event=>{
   if(editor.disabled||editor.readOnly||event.isComposing)return;
+  if((event.metaKey||event.ctrlKey)&&!event.altKey&&event.key.toLowerCase()==='z'){
+    event.preventDefault();restoreEdit(editor,event.shiftKey);return;
+  }
+  captureSelection(editor);
   if(event.key==='Tab'&&!event.altKey&&!event.ctrlKey&&!event.metaKey){
     event.preventDefault();
     const text=editor.value,start=editor.selectionStart,end=editor.selectionEnd;
@@ -463,13 +506,29 @@ for(const editor of Object.values(editors))editor.addEventListener('keydown',eve
   const lineEnd=nextBreak===-1?text.length:nextBreak;
   const block=text.slice(lineStart,lineEnd);
   const above=event.key==='ArrowUp';
-  const position=above?lineStart:lineEnd;
-  const insertion=above?block+'\n':'\n'+block;
-  const shift=above?0:insertion.length;
   const scrollTop=editor.scrollTop,scrollLeft=editor.scrollLeft;
   const direction=editor.selectionDirection;
-  editor.setRangeText(insertion,position,position,'preserve');
-  editor.setSelectionRange(start+shift,end+shift,direction);
+  let shift;
+  if(event.shiftKey){
+    const position=above?lineStart:lineEnd;
+    const insertion=above?block+'\n':'\n'+block;
+    shift=above?0:insertion.length;
+    editor.setRangeText(insertion,position,position,'preserve');
+  }else if(above){
+    if(lineStart===0)return;
+    const previousStart=lineStart===1?0:text.lastIndexOf('\n',lineStart-2)+1;
+    const previous=text.slice(previousStart,lineStart-1);
+    shift=previousStart-lineStart;
+    editor.setRangeText(block+'\n'+previous,previousStart,lineEnd,'preserve');
+  }else{
+    if(lineEnd===text.length)return;
+    const followingBreak=text.indexOf('\n',lineEnd+1);
+    const followingEnd=followingBreak===-1?text.length:followingBreak;
+    const following=text.slice(lineEnd+1,followingEnd);
+    shift=following.length+1;
+    editor.setRangeText(following+'\n'+block,lineStart,followingEnd,'preserve');
+  }
+  editor.setSelectionRange(start+shift,Math.min(end+shift,editor.value.length),direction);
   editor.scrollTop=scrollTop;editor.scrollLeft=scrollLeft;
   change();
 });

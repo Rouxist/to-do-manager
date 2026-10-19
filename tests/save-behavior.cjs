@@ -81,7 +81,7 @@ const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringif
   assert.equal(node('#editor-daily').value,'Edit during loading');assert(isDirty());
   function duplicate(input,start,end,key,expected,newStart,newEnd=start===end?newStart:end){
     const editor=node('#editor-daily');editor.value=input;editor.setSelectionRange(start,end,'forward');let prevented=false;
-    editor.events.keydown({altKey:true,key,preventDefault(){prevented=true;}});
+    editor.events.keydown({altKey:true,shiftKey:true,key,preventDefault(){prevented=true;}});
     assert(prevented);assert.equal(editor.value,expected);assert.equal(editor.selectionStart,newStart);assert.equal(editor.selectionEnd,newEnd);assert(isDirty());assert(leaving());
   }
   duplicate('first\n  - 📚 task\nlast',9,9,'ArrowDown','first\n  - 📚 task\n  - 📚 task\nlast',21);
@@ -89,6 +89,24 @@ const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringif
   duplicate('one\ntwo',0,0,'ArrowUp','one\none\ntwo',0);duplicate('',0,0,'ArrowDown','\n',1);
   duplicate('\nnext',0,0,'ArrowUp','\n\nnext',0);duplicate('one\ntwo\nthree',0,8,'ArrowDown','one\ntwo\none\ntwo\nthree',8,16);
   duplicate('one\ntwo\nthree',1,6,'ArrowUp','one\ntwo\none\ntwo\nthree',1,6);
+  function move(input,start,end,key,expected,newStart,newEnd=newStart){
+    const editor=node('#editor-daily');editor.value=input;editor.setSelectionRange(start,end,'backward');
+    editor.scrollTop=20;editor.scrollLeft=10;let prevented=false;
+    editor.events.keydown({altKey:true,shiftKey:false,key,preventDefault(){prevented=true;}});
+    assert(prevented);assert.equal(editor.value,expected);
+    assert.equal(editor.selectionStart,newStart);assert.equal(editor.selectionEnd,newEnd);
+    assert.equal(editor.selectionDirection,'backward');assert.equal(editor.scrollTop,20);assert.equal(editor.scrollLeft,10);
+  }
+  move('one\ntwo\nthree',5,5,'ArrowUp','two\none\nthree',1);
+  move('one\ntwo\nthree',5,5,'ArrowDown','one\nthree\ntwo',11);
+  move('one\ntwo\nthree',0,8,'ArrowDown','three\none\ntwo',6,13);
+  move('one\ntwo\nthree',4,13,'ArrowUp','two\nthree\none',0,9);
+  move('first\n  - 📚 task\nlast',9,9,'ArrowDown','first\nlast\n  - 📚 task',14);
+  move('\nnext',0,0,'ArrowDown','next\n',5);
+  move('one\n',4,4,'ArrowUp','\none',0);
+  move('one\ntwo',0,0,'ArrowUp','one\ntwo',0);
+  move('one\ntwo',5,5,'ArrowDown','one\ntwo',5);
+  move('',0,0,'ArrowDown','',0);
   function indent(input,start,end,shift,expected,newStart,newEnd=newStart){
     const editor=node('#editor-daily');editor.value=input;editor.setSelectionRange(start,end,'forward');let prevented=false;
     editor.events.keydown({key:'Tab',shiftKey:shift,preventDefault(){prevented=true;}});
@@ -118,6 +136,32 @@ const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringif
   const reopened=createApp();reopened.latest.resolve(response(200,remoteText));await vm.runInContext('initialLoadPromise',reopened.context);
   assert(!reopened.node('#token-dialog').open);assert.equal(reopened.requests.length,1,'A valid browser cookie should avoid logging in again');
   assert.equal(reopened.node('#editor-daily').value,'Remote daily');
+  const undoEditor=reopened.node('#editor-daily');
+  const press=options=>{let prevented=false;undoEditor.events.keydown({...options,preventDefault(){prevented=true;}});assert(prevented);};
+  const undoDirty=()=>vm.runInContext('hasUnsavedChanges()',reopened.context);
+  undoEditor.setSelectionRange(3,3,'forward');undoEditor.scrollTop=12;undoEditor.scrollLeft=4;
+  press({altKey:true,shiftKey:true,key:'ArrowDown'});
+  assert.equal(undoEditor.value,'Remote daily\nRemote daily');assert(undoDirty());
+  press({metaKey:true,key:'z'});
+  assert.equal(undoEditor.value,'Remote daily');assert.equal(undoEditor.selectionStart,3);assert(!undoDirty());
+  assert.equal(undoEditor.scrollTop,12);assert.equal(undoEditor.scrollLeft,4);
+  press({metaKey:true,shiftKey:true,key:'z'});
+  assert.equal(undoEditor.value,'Remote daily\nRemote daily');
+  press({metaKey:true,key:'z'});
+  undoEditor.events.beforeinput({inputType:'insertText'});
+  undoEditor.value='Remote daily!';undoEditor.setSelectionRange(13,13,'forward');undoEditor.events.input();
+  press({metaKey:true,shiftKey:true,key:'z'});assert.equal(undoEditor.value,'Remote daily!','Typing clears redo');
+  press({ctrlKey:true,key:'z'});assert.equal(undoEditor.value,'Remote daily');assert(!undoDirty());
+  press({key:'Tab'});assert.equal(undoEditor.value,'Rem  ote daily');
+  press({metaKey:true,key:'z'});assert.equal(undoEditor.value,'Remote daily');
+  undoEditor.events.beforeinput({inputType:'insertFromPaste'});
+  undoEditor.value='one\ntwo';undoEditor.setSelectionRange(5,5,'forward');undoEditor.events.input();
+  press({altKey:true,key:'ArrowUp'});assert.equal(undoEditor.value,'two\none');
+  press({metaKey:true,key:'z'});assert.equal(undoEditor.value,'one\ntwo');assert.equal(undoEditor.selectionStart,5);
+  assert.equal(reopened.node('#editor-weekly').value,'Remote weekly');
+  undoEditor.events.beforeinput({inputType:'historyUndo',preventDefault(){}});
+  assert.equal(undoEditor.value,'Remote daily');assert(!undoDirty());
+  press({metaKey:true,key:'z'});assert.equal(undoEditor.value,'Remote daily','Cannot undo loading notes');
   const loggedOut=createApp();loggedOut.latest.resolve(response(401,'Sign in'));await vm.runInContext('initialLoadPromise',loggedOut.context);
   assert(loggedOut.node('#token-dialog').open);assert.equal(loggedOut.node('#editor-daily').value,'');
   assert(!('pagehide' in app.windowEvents));

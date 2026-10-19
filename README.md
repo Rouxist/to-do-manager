@@ -47,6 +47,10 @@ For a manual browser check, enter the token, close and reopen the browser, then 
 
 Research appears to the right of Chores below the planning panels (stacked below on small screens). It supports Markdown and the same save/export and duplication shortcuts. Older backups load with Research empty; the next save includes it.
 
+In any Markdown editor, **Option + Up/Down** moves the current line (or selected lines) above/below the neighboring line. **Option + Shift + Up/Down** duplicates it above/below. On Windows/Linux, use Alt in place of Option.
+
+**Cmd + Z** undoes edits, including moving, duplicating, and indenting lines; **Cmd + Shift + Z** redoes them. On Windows/Linux, use Ctrl in place of Cmd. Each panel keeps up to 200 undo steps; loading notes or logging out clears the history.
+
 ## R2 file versions on Vercel
 
 The editor loads notes directly from the authenticated R2 API (`GET /api/notes`), using the same bucket and key as saving. The backend returns the storage ETag as `X-R2-Version` as well as the standard `ETag`. The editor uses `X-R2-Version` for conditional saves so intermediary compression or page-cache ETag changes do not affect R2 version checks. Stale versions still reject writes to protect newer notes.
