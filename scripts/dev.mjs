@@ -44,6 +44,11 @@ const server = createServer(async (incoming, outgoing) => {
       outgoing.writeHead(405, { Allow: 'GET, HEAD' }).end('Method not allowed.');
       return;
     }
+    if (url.pathname === '/calendar-core.js') {
+      const source = await readFile(resolve(root, 'dist/calendar-core.js'));
+      outgoing.writeHead(200, { 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'no-store' });
+      outgoing.end(incoming.method === 'HEAD' ? undefined : source); return;
+    }
     if (url.pathname !== '/' && url.pathname !== '/index.html') {
       outgoing.writeHead(404).end('Not found.');
       return;

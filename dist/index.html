@@ -108,7 +108,12 @@ main:has(.workspace[data-group=daily]){max-width:none}
 .token-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
 .token-actions button{padding:8px 14px;border:1px solid #d5d4d0;border-radius:6px;background:#f5f5f3;color:inherit}
 .extra-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.extra-panels>section{min-width:0}@media(max-width:600px){.extra-panels{grid-template-columns:1fr}}
-</style></head><body><header><div class="brand">▤ My workspace</div><div class="actions"><span id="status" role="status">No file loaded</span><button class="quiet" id="r2-open">Reload from R2</button><button class="quiet" id="r2-save" hidden>Save to R2 ⌥S</button><button class="quiet" id="logout" hidden>Log out</button><button class="quiet" id="download">Export .md ↗</button></div></header><main data-mode="write"><div id="initial-load-notice" hidden><span id="initial-load-message" role="status"></span> <button class="quiet" id="initial-load-retry">Retry loading</button></div><div class="toolbar"><div class="tabs" role="group" aria-label="Note view"><button data-mode="write" aria-pressed="true">Write</button><button data-mode="read" aria-pressed="false">Read</button></div><fieldset class="period-selector" aria-label="Visible planning periods"><label><input type="radio" name="period-group" value="long"><span>Long term</span></label><label><input type="radio" name="period-group" value="short"><span>Mid term</span></label><label><input type="radio" name="period-group" value="daily" checked><span>Daily</span></label></fieldset></div><div class="workspace" id="workspace" data-group="daily"><section class="note-column" data-period="annual" aria-labelledby="heading-annual" hidden><h2 class="column-title" id="heading-annual">Annual</h2><div class="editor-pane"><textarea id="editor-annual" aria-label="Annual notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-annual" aria-label="Formatted annual notes"></article></div></section><section class="note-column" data-period="quarterly" aria-labelledby="heading-quarterly" hidden><h2 class="column-title" id="heading-quarterly">Quarterly</h2><div class="editor-pane"><textarea id="editor-quarterly" aria-label="Quarterly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-quarterly" aria-label="Formatted quarterly notes"></article></div></section><section class="note-column" data-period="monthly" aria-labelledby="heading-monthly" hidden><h2 class="column-title" id="heading-monthly">Monthly</h2><div class="editor-pane"><textarea id="editor-monthly" aria-label="Monthly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-monthly" aria-label="Formatted monthly notes"></article></div></section><section class="note-column" data-period="weekly" aria-labelledby="heading-weekly" hidden><h2 class="column-title" id="heading-weekly">Weekly</h2><div class="editor-pane"><textarea id="editor-weekly" aria-label="Weekly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-weekly" aria-label="Formatted weekly notes"></article></div></section><section class="note-column" data-period="daily" aria-labelledby="heading-daily"><h2 class="column-title" id="heading-daily">Monday</h2><div class="editor-pane"><textarea id="editor-daily" aria-label="Monday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-daily" aria-label="Formatted monday notes"></article></div></section><section class="note-column" data-period="tuesday" aria-labelledby="heading-tuesday"><h2 class="column-title" id="heading-tuesday">Tuesday</h2><div class="editor-pane"><textarea id="editor-tuesday" aria-label="Tuesday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-tuesday" aria-label="Formatted tuesday notes"></article></div></section><section class="note-column" data-period="wednesday" aria-labelledby="heading-wednesday"><h2 class="column-title" id="heading-wednesday">Wednesday</h2><div class="editor-pane"><textarea id="editor-wednesday" aria-label="Wednesday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-wednesday" aria-label="Formatted wednesday notes"></article></div></section><section class="note-column" data-period="thursday" aria-labelledby="heading-thursday"><h2 class="column-title" id="heading-thursday">Thursday</h2><div class="editor-pane"><textarea id="editor-thursday" aria-label="Thursday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-thursday" aria-label="Formatted thursday notes"></article></div></section><section class="note-column" data-period="friday" aria-labelledby="heading-friday"><h2 class="column-title" id="heading-friday">Friday</h2><div class="editor-pane"><textarea id="editor-friday" aria-label="Friday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-friday" aria-label="Formatted friday notes"></article></div></section><section class="note-column" data-period="saturday" aria-labelledby="heading-saturday"><h2 class="column-title" id="heading-saturday">Saturday</h2><div class="editor-pane"><textarea id="editor-saturday" aria-label="Saturday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-saturday" aria-label="Formatted saturday notes"></article></div></section><section class="note-column" data-period="sunday" aria-labelledby="heading-sunday"><h2 class="column-title" id="heading-sunday">Sunday</h2><div class="editor-pane"><textarea id="editor-sunday" aria-label="Sunday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-sunday" aria-label="Formatted sunday notes"></article></div></section></div><div class="extra-panels"><section class="chores" data-period="chores" aria-labelledby="heading-chores"><h2 class="column-title" id="heading-chores">Chores</h2><div class="editor-pane"><textarea id="editor-chores" aria-label="Chores notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-chores" aria-label="Formatted chores notes"></article></div></section><section class="chores research" data-period="research" aria-labelledby="heading-research"><h2 class="column-title" id="heading-research">Research</h2><div class="editor-pane"><textarea id="editor-research" aria-label="Research notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-research" aria-label="Formatted research notes"></article></div></section></div><footer><span id="words">0 words</span><span>Option + S (Alt + S): save to R2 · Cmd/Ctrl + S also works.</span></footer></main>
+
+.calendar-visibility-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.calendar-workspace{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;padding-bottom:28px}
+.section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}.section-heading h2{margin:0;font-size:20px}.calendar-help{font-size:12px;color:#787774}
+.calendar-section{min-width:0;border-left:1px solid #e9e9e6;padding-left:32px}.calendar-layout{display:block}.calendar-controls{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}.calendar-controls h3{font-size:15px;margin:0}.calendar-weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}.calendar-weekdays span{text-align:center;font-size:11px;color:#787774;padding:8px 0}.calendar-day{min-height:64px;border:1px solid transparent;background:#fafaf9;border-radius:7px;color:inherit;padding:7px 2px;display:flex;align-items:center;flex-direction:column;gap:5px}.calendar-day.outside{opacity:.5}.calendar-day[aria-current=date]{border-color:#b1aea4}.calendar-day[aria-pressed=true]{background:#eeede6;box-shadow:inset 0 0 0 1px #787774}.calendar-day small{font-size:10px;white-space:nowrap}.routine-dot{font-size:9px;color:#6f7765}.date-notes{min-width:0}.date-notes textarea,.date-notes .preview{height:clamp(160px,28dvh,280px)}.day-routines{margin-top:20px;padding-top:18px;border-top:1px solid #e9e9e6}.day-routines>h3{margin:0 0 12px;font-size:13px;font-weight:600;color:#787774}.routine-checklist{margin-top:14px;display:grid;gap:9px}.routine-checklist label{display:flex;align-items:center;gap:9px;font-size:14px}.routine-checklist input:checked+span{color:#9b9a97;text-decoration:line-through}.routine-checklist:empty{display:none}.routine-manager{margin:0 0 14px}.routine-manager summary{cursor:pointer;font-size:15px;font-weight:600}.routine-list{display:grid;gap:8px;margin:16px 0}.routine-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid #f0efec;padding-bottom:8px}.routine-row>div{flex:1;min-width:150px}.routine-row small{display:block;color:#787774;margin-top:4px}.routine-form-fields{border:0;padding:0;margin:16px 0;display:flex;align-items:end;gap:14px;flex-wrap:wrap}.routine-form-fields>label{display:grid;gap:6px;font-size:12px}.routine-form-fields input:not([type=checkbox]),.routine-form-fields select{padding:8px;border:1px solid #d5d4d0;border-radius:5px;background:#fff;color:inherit;min-height:36px}.routine-form-fields .routine-name{flex:1;min-width:180px}.routine-weekdays{border:0;padding:0;display:flex;gap:10px;flex-wrap:wrap;font-size:12px}.routine-weekdays legend{margin-bottom:8px}.routine-form-fields button{border:1px solid #d5d4d0;border-radius:5px;background:#f5f5f3;padding:8px 12px;color:inherit}.routine-message{font-size:13px;color:#9c4545}input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #9b9a97;outline-offset:3px}button:disabled{cursor:default;opacity:.5}
+@media(max-width:760px){.calendar-workspace{grid-template-columns:1fr;gap:24px}.calendar-section{border-left:0;border-top:1px solid #e9e9e6;padding:24px 0 0}.calendar-day{min-height:58px}}
+</style></head><body><header><div class="brand">▤ My workspace</div><div class="actions"><span id="status" role="status">No file loaded</span><button class="quiet" id="r2-open">Reload from R2</button><button class="quiet" id="r2-save" hidden>Save to R2 ⌥S</button><button class="quiet" id="logout" hidden>Log out</button><button class="quiet" id="download">Export .md ↗</button></div></header><main data-mode="write"><div id="initial-load-notice" hidden><span id="initial-load-message" role="status"></span> <button class="quiet" id="initial-load-retry">Retry loading</button></div><div class="calendar-visibility-toolbar"><div class="tabs" role="group" aria-label="Note view"><button data-mode="write" aria-pressed="true">Write</button><button data-mode="read" aria-pressed="false">Read</button></div><button type="button" class="quiet" id="calendar-toggle" aria-expanded="true" aria-controls="calendar-area">Hide calendar</button></div><div id="calendar-area"><div class="calendar-workspace"><section class="date-notes" aria-labelledby="selected-date-heading"><div class="section-heading"><h2 id="selected-date-heading" aria-live="polite"></h2></div><div class="editor-pane"><textarea id="editor-scheduled" aria-label="Selected date notes in Markdown" placeholder="Plan something for this day…" spellcheck="true"></textarea></div><div class="preview-pane"><article class="preview" id="preview-scheduled" tabindex="0" aria-label="Formatted notes for selected date"></article></div><section class="day-routines" aria-labelledby="heading-routines"><h3 id="heading-routines">Routines</h3><details class="routine-manager"><summary>Manage routines</summary><div id="routine-list" class="routine-list"></div><form id="routine-form"><fieldset id="routine-fields" class="routine-form-fields"><legend id="routine-form-title">New routine</legend><label class="routine-name">Routine<input id="routine-title" required maxlength="500" placeholder="e.g. Review monthly goals"></label><label>Starts<input id="routine-start" type="date" required min="0001-01-01" max="9999-12-31"></label><label>Repeats<select id="routine-frequency"><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></label><label id="routine-month-label" hidden>Day of month<input id="routine-month-day" type="number" min="1" max="31" value="1"></label><fieldset id="routine-weekdays" class="routine-weekdays" hidden><legend>On weekdays</legend><label><input type="checkbox" id="routine-weekday-1" name="routine-weekday" value="1">Mon</label><label><input type="checkbox" id="routine-weekday-2" name="routine-weekday" value="2">Tue</label><label><input type="checkbox" id="routine-weekday-3" name="routine-weekday" value="3">Wed</label><label><input type="checkbox" id="routine-weekday-4" name="routine-weekday" value="4">Thu</label><label><input type="checkbox" id="routine-weekday-5" name="routine-weekday" value="5">Fri</label><label><input type="checkbox" id="routine-weekday-6" name="routine-weekday" value="6">Sat</label><label><input type="checkbox" id="routine-weekday-0" name="routine-weekday" value="0">Sun</label></fieldset><button id="routine-submit" type="submit">Add routine</button><button id="routine-cancel" type="button" hidden>Cancel edit</button></fieldset><p class="calendar-help">Monthly dates beyond the end of a month use its last day. Changes to existing routines apply from today.</p><p class="routine-message" id="routine-message" role="status"></p></form></details><div class="routine-checklist" id="routines-scheduled" aria-label="Selected date routines"></div></section></section><section class="calendar-section" aria-labelledby="heading-calendar"><div class="section-heading"><h2 id="heading-calendar">Calendar</h2><span class="calendar-help">Lines count nonblank notes · ● Scheduled routines</span></div><div class="calendar-layout"><div><div class="calendar-controls"><button class="quiet" id="calendar-prev" aria-label="Previous month">←</button><h3 id="calendar-month" aria-live="polite"></h3><button class="quiet" id="calendar-next" aria-label="Next month">→</button><button class="quiet" id="calendar-today">Today</button></div><div class="calendar-weekdays" aria-hidden="true"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="calendar-grid" id="calendar-grid" role="group" aria-label="Choose a date"></div><p class="calendar-help">Arrow keys move by day or week. Page Up/Down changes month.</p></div></div></section></div></div><div class="toolbar"><fieldset class="period-selector" aria-label="Visible planning periods"><label><input type="radio" name="period-group" value="long"><span>Long term</span></label><label><input type="radio" name="period-group" value="short"><span>Mid term</span></label><label><input type="radio" name="period-group" value="daily" checked><span>Daily</span></label></fieldset></div><div class="workspace" id="workspace" data-group="daily"><section class="note-column" data-period="annual" aria-labelledby="heading-annual" hidden><h2 class="column-title" id="heading-annual">Annual</h2><div class="editor-pane"><textarea id="editor-annual" aria-label="Annual notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-annual" aria-label="Formatted annual notes"></article></div></section><section class="note-column" data-period="quarterly" aria-labelledby="heading-quarterly" hidden><h2 class="column-title" id="heading-quarterly">Quarterly</h2><div class="editor-pane"><textarea id="editor-quarterly" aria-label="Quarterly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-quarterly" aria-label="Formatted quarterly notes"></article></div></section><section class="note-column" data-period="monthly" aria-labelledby="heading-monthly" hidden><h2 class="column-title" id="heading-monthly">Monthly</h2><div class="editor-pane"><textarea id="editor-monthly" aria-label="Monthly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-monthly" aria-label="Formatted monthly notes"></article></div></section><section class="note-column" data-period="weekly" aria-labelledby="heading-weekly" hidden><h2 class="column-title" id="heading-weekly">Weekly</h2><div class="editor-pane"><textarea id="editor-weekly" aria-label="Weekly notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-weekly" aria-label="Formatted weekly notes"></article></div></section><section class="note-column" data-period="daily" aria-labelledby="heading-daily"><h2 class="column-title" id="heading-daily">Monday</h2><div class="editor-pane"><textarea id="editor-daily" aria-label="Monday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-daily" aria-label="Formatted monday notes"></article></div></section><section class="note-column" data-period="tuesday" aria-labelledby="heading-tuesday"><h2 class="column-title" id="heading-tuesday">Tuesday</h2><div class="editor-pane"><textarea id="editor-tuesday" aria-label="Tuesday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-tuesday" aria-label="Formatted tuesday notes"></article></div></section><section class="note-column" data-period="wednesday" aria-labelledby="heading-wednesday"><h2 class="column-title" id="heading-wednesday">Wednesday</h2><div class="editor-pane"><textarea id="editor-wednesday" aria-label="Wednesday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-wednesday" aria-label="Formatted wednesday notes"></article></div></section><section class="note-column" data-period="thursday" aria-labelledby="heading-thursday"><h2 class="column-title" id="heading-thursday">Thursday</h2><div class="editor-pane"><textarea id="editor-thursday" aria-label="Thursday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-thursday" aria-label="Formatted thursday notes"></article></div></section><section class="note-column" data-period="friday" aria-labelledby="heading-friday"><h2 class="column-title" id="heading-friday">Friday</h2><div class="editor-pane"><textarea id="editor-friday" aria-label="Friday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-friday" aria-label="Formatted friday notes"></article></div></section><section class="note-column" data-period="saturday" aria-labelledby="heading-saturday"><h2 class="column-title" id="heading-saturday">Saturday</h2><div class="editor-pane"><textarea id="editor-saturday" aria-label="Saturday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-saturday" aria-label="Formatted saturday notes"></article></div></section><section class="note-column" data-period="sunday" aria-labelledby="heading-sunday"><h2 class="column-title" id="heading-sunday">Sunday</h2><div class="editor-pane"><textarea id="editor-sunday" aria-label="Sunday notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-sunday" aria-label="Formatted sunday notes"></article></div></section></div><div class="extra-panels"><section class="chores" data-period="chores" aria-labelledby="heading-chores"><h2 class="column-title" id="heading-chores">Chores</h2><div class="editor-pane"><textarea id="editor-chores" aria-label="Chores notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-chores" aria-label="Formatted chores notes"></article></div></section><section class="chores research" data-period="research" aria-labelledby="heading-research"><h2 class="column-title" id="heading-research">Research</h2><div class="editor-pane"><textarea id="editor-research" aria-label="Research notes in Markdown" spellcheck="true" placeholder="Start writing…"></textarea></div><div class="preview-pane"><article tabindex="0" class="preview" id="preview-research" aria-label="Formatted research notes"></article></div></section></div><footer><span id="words">0 words</span><span>Option + S (Alt + S): save to R2 · Cmd/Ctrl + S also works.</span></footer></main>
 <dialog id="token-dialog" aria-labelledby="token-title">
   <form id="token-form">
     <h2 id="token-title">Unlock notes</h2>
@@ -118,11 +123,23 @@ main:has(.workspace[data-group=daily]){max-width:none}
     <div class="token-actions"><button id="token-cancel" type="button">Cancel</button><button id="token-submit" type="submit">Save to R2</button></div>
   </form>
 </dialog>
-<script>
+<script type="module">
+import * as Calendar from './calendar-core.js';
 const periods=["chores","annual","quarterly","monthly","weekly","daily","tuesday","wednesday","thursday","friday","saturday","sunday","research"];
 const editors=Object.fromEntries(periods.map(key=>[key,document.querySelector('#editor-'+key)]));
 const previews=Object.fromEntries(periods.map(key=>[key,document.querySelector('#preview-'+key)]));
+editors.scheduled=document.querySelector('#editor-scheduled');
+previews.scheduled=document.querySelector('#preview-scheduled');
+let calendarData=Calendar.normalizeCalendar({}),todayKey=Calendar.dateKey(),selectedDate=todayKey,visibleMonth=todayKey.slice(0,7)+'-01',editingRoutineId=null;
+const dateHistories=new Map();
+const dateForEditor=editor=>editor===editors.scheduled?selectedDate:null;
 const status=document.querySelector('#status'),workspace=document.querySelector('#workspace');
+const calendarToggle=document.querySelector('#calendar-toggle'),calendarArea=document.querySelector('#calendar-area');
+calendarToggle.addEventListener('click',()=>{
+  calendarArea.hidden=!calendarArea.hidden;
+  calendarToggle.setAttribute('aria-expanded',String(!calendarArea.hidden));
+  calendarToggle.textContent=calendarArea.hidden?'Show calendar':'Hide calendar';
+});
       const escapeHTML = (s) =>
         s
           .replace(/&/g, "&amp;")
@@ -269,22 +286,36 @@ const status=document.querySelector('#status'),workspace=document.querySelector(
         return html;
       }
 
-function render(){let count=0;for(const key of periods){const text=editors[key].value;previews[key].innerHTML=text.trim()?renderMarkdown(text):'<p class="empty">No notes yet.</p>';count+=text.trim()?text.trim().split(/\s+/).length:0;}document.querySelector('#words').textContent=count+' '+(count===1?'word':'words');}
+function render(){
+  syncDateEditor();
+  for(const key of Object.keys(editors)){const text=editors[key].value;previews[key].innerHTML=text.trim()?renderMarkdown(text):'<p class="empty">No notes yet.</p>';}
+  const texts=[...periods.map(key=>editors[key].value),...Object.values(calendarData.scheduledByDate)];
+  const count=texts.reduce((sum,text)=>sum+(text.trim()?text.trim().split(/\s+/).length:0),0);
+  document.querySelector('#words').textContent=count+' '+(count===1?'word':'words');
+  renderCalendar();renderRoutines();
+}
 let savedSnapshot=JSON.stringify(noteSnapshot());
 let savedLabel='No file loaded';
 function hasUnsavedChanges(){return JSON.stringify(noteSnapshot())!==savedSnapshot;}
-function updateSaveStatus(){status.textContent=hasUnsavedChanges()?'Unsaved changes':savedLabel;}
+function updateSaveStatus(){status.textContent=hasUnsavedChanges()?'Unsaved changes':savedLabel;updateCalendarAccess();}
 const editHistory=new Map();
 const editorState=editor=>({value:editor.value,start:editor.selectionStart,end:editor.selectionEnd,direction:editor.selectionDirection,top:editor.scrollTop,left:editor.scrollLeft});
+function historyFor(editor){
+  const date=dateForEditor(editor);
+  if(!date)return editHistory.get(editor);
+  if(!dateHistories.has(date))dateHistories.set(date,{undo:[],redo:[],current:editorState(editor)});
+  return dateHistories.get(date);
+}
 function resetEditHistory(){
+  dateHistories.clear();
   for(const editor of Object.values(editors))editHistory.set(editor,{undo:[],redo:[],current:editorState(editor)});
 }
 function captureSelection(editor){
-  const history=editHistory.get(editor);
+  const history=historyFor(editor);
   if(history.current.value===editor.value)history.current=editorState(editor);
 }
 function restoreEdit(editor,redo=false){
-  const history=editHistory.get(editor),source=redo?history.redo:history.undo;
+  const history=historyFor(editor),source=redo?history.redo:history.undo;
   if(!source.length)return;
   (redo?history.undo:history.redo).push(editorState(editor));
   const state=source.pop();
@@ -292,7 +323,7 @@ function restoreEdit(editor,redo=false){
   editor.setSelectionRange(state.start,state.end,state.direction);
   editor.scrollTop=state.top;editor.scrollLeft=state.left;
   history.current=editorState(editor);
-  render();updateSaveStatus();
+  commitDateEditor(editor);render();updateSaveStatus();
 }
 resetEditHistory();
 for(const editor of Object.values(editors))editor.addEventListener('beforeinput',event=>{
@@ -304,23 +335,24 @@ for(const editor of Object.values(editors))editor.addEventListener('beforeinput'
 });
 function change(){
   for(const editor of Object.values(editors)){
-    const history=editHistory.get(editor);
+    const history=historyFor(editor);
     if(history.current.value===editor.value)continue;
     history.undo.push(history.current);
     if(history.undo.length>200)history.undo.shift();
     history.redo=[];history.current=editorState(editor);
+    commitDateEditor(editor);
   }
   render();updateSaveStatus();
 }
-for(const key of periods){editors[key].addEventListener('input',change);previews[key].addEventListener('change',event=>{const checkbox=event.target;if(loggingOut)return;if(!checkbox.matches('input[data-line]'))return;const lines=editors[key].value.split('\n'),i=Number(checkbox.dataset.line);if(!Number.isInteger(i)||i<0||i>=lines.length)return;lines[i]=lines[i].replace(/^(\s*[-*+]\s+|\s*\d+[.)]\s+)\[[ xX]\]/,(_,prefix)=>prefix+'['+(checkbox.checked?'x':' ')+']');editors[key].value=lines.join('\n');change();});}
+for(const key of Object.keys(editors)){editors[key].addEventListener('input',change);previews[key].addEventListener('change',event=>{const checkbox=event.target;if(loggingOut||editors[key].disabled)return;if(!checkbox.matches('input[data-line]'))return;const lines=editors[key].value.split('\n'),i=Number(checkbox.dataset.line);if(!Number.isInteger(i)||i<0||i>=lines.length)return;lines[i]=lines[i].replace(/^(\s*[-*+]\s+|\s*\d+[.)]\s+)\[[ xX]\]/,(_,prefix)=>prefix+'['+(checkbox.checked?'x':' ')+']');editors[key].value=lines.join('\n');change();});}
 document.querySelectorAll('input[name="period-group"]').forEach(radio=>radio.addEventListener('change',()=>{if(!radio.checked)return;workspace.dataset.group=radio.value;const visible={long:['annual','quarterly'],short:['monthly','weekly'],daily:['daily','tuesday','wednesday','thursday','friday','saturday','sunday']}[radio.value];workspace.style.setProperty('--column-count',visible.length);document.querySelectorAll('.note-column').forEach(column=>column.hidden=!visible.includes(column.dataset.period));}));
 document.querySelectorAll('.tabs button').forEach(button=>button.addEventListener('click',()=>{document.querySelector('main').dataset.mode=button.dataset.mode;document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));}));
-function noteSnapshot(){return Object.fromEntries(periods.map(key=>[key,editors[key].value]));}
+function noteSnapshot(){return {...Object.fromEntries(periods.map(key=>[key,editors[key].value])),...Calendar.normalizeCalendar(calendarData)};}
 function markdownBackup(){
   const notes=noteSnapshot();
   const body=periods.map(key=>'# '+(key==='daily'?'Monday':key[0].toUpperCase()+key.slice(1))+'\n\n'+notes[key]).join('\n\n');
   // Store exact panel boundaries for lossless re-import, even when notes contain headings.
-  return body+'\n\n<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringify(notes))+' -->\n';
+  return body+calendarMarkdown(notes)+'\n\n<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringify(notes))+' -->\n';
 }
 document.querySelector('#download').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([markdownBackup()],{type:'text/markdown;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='notes.md';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);if(hasUnsavedChanges())status.textContent='Download started · save to R2 to confirm saving';});
 function parseMarkdownBackup(source){
@@ -346,13 +378,14 @@ function parseMarkdownBackup(source){
         offset=next+2;
       }
     }
-  return notes;
+  return {...notes,...Calendar.normalizeCalendar(notes)};
 }
 function loadNotes(notes,label){
   if(r2Pending)throw new Error('Wait for the current save to finish before loading notes.');
-  if(periods.some(key=>editors[key].value.trim())&&!confirm('Replace all current panels with the notes from this backup? Export first if you want to keep the current notes.'))return false;
+  if((periods.some(key=>editors[key].value.trim())||Object.keys(calendarData.scheduledByDate).length||calendarData.routines.length)&&!confirm('Replace all current panels with the notes from this backup? Export first if you want to keep the current notes.'))return false;
+  calendarData=Calendar.normalizeCalendar(notes);
   for(const key of periods)editors[key].value=notes[key];
-  resetEditHistory();
+  syncDateEditor();resetRoutineForm();resetEditHistory();
   savedSnapshot=JSON.stringify(noteSnapshot());savedLabel=label;
   render();updateSaveStatus();return true;
 }
@@ -375,7 +408,7 @@ document.querySelector('#token-form').addEventListener('submit',async event=>{
   tokenInput.value='';
   if(!token)return;
   const action=tokenAction;
-  loginPending=true;document.querySelector('#token-submit').disabled=true;
+  loginPending=true;updateCalendarAccess();document.querySelector('#token-submit').disabled=true;
   tokenMessage.textContent='Signing in…';
   try{
     const response=await fetch('/api/session',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({token})});
@@ -385,7 +418,7 @@ document.querySelector('#token-form').addEventListener('submit',async event=>{
     if(action==='load')await loadInitialNotes();
     else await saveR2();
   }catch(error){tokenMessage.textContent=error.message||'Could not sign in. Please try again.';}
-  finally{loginPending=false;document.querySelector('#token-submit').disabled=false;}
+  finally{loginPending=false;document.querySelector('#token-submit').disabled=false;updateCalendarAccess();}
 });
 async function saveR2(){
   if(!r2Connection||r2Pending||initialLoading||loginPending||loggingOut)return;
@@ -408,7 +441,7 @@ async function saveR2(){
 r2SaveButton.addEventListener('click',saveR2);
 async function loadInitialNotes(){
   if(initialLoading||r2Pending||loginPending||loggingOut)return;
-  initialLoading=true;
+  initialLoading=true;updateCalendarAccess();
   const before=JSON.stringify(noteSnapshot());
   for(const editor of Object.values(editors))editor.disabled=true;
   document.querySelector('#r2-open').disabled=true;
@@ -439,6 +472,7 @@ async function loadInitialNotes(){
   }finally{
     initialLoading=false;
     for(const editor of Object.values(editors))editor.disabled=!r2Connection;
+    updateCalendarAccess();
     document.querySelector('#r2-open').disabled=false;
     document.querySelector('#initial-load-retry').disabled=false;
   }
@@ -448,11 +482,12 @@ document.querySelector('#r2-open').addEventListener('click',loadInitialNotes);
 logoutButton.addEventListener('click',async()=>{
   if(loggingOut||r2Pending||initialLoading||loginPending)return;
   if(hasUnsavedChanges()&&!confirm('Discard unsaved edits and log out? Export first if you want to keep them.'))return;
-  loggingOut=true;logoutButton.disabled=true;
+  loggingOut=true;updateCalendarAccess();logoutButton.disabled=true;
   for(const editor of Object.values(editors))editor.disabled=true;
   try{
     const response=await fetch('/api/session',{method:'DELETE',credentials:'same-origin'});
     if(!response.ok)throw new Error(await response.text());
+    calendarData=Calendar.normalizeCalendar({});resetRoutineForm();
     for(const editor of Object.values(editors))editor.value='';
     resetEditHistory();
     r2Connection=null;r2SaveButton.hidden=true;logoutButton.hidden=true;
@@ -460,7 +495,7 @@ logoutButton.addEventListener('click',async()=>{
     initialNotice.hidden=true;tokenInput.value='';tokenMessage.textContent=loginExplanation;
     render();updateSaveStatus();askForToken('load');
   }catch(error){initialMessage.textContent=error.message||'Could not log out. Please try again.';initialNotice.hidden=false;}
-  finally{loggingOut=false;logoutButton.disabled=false;for(const editor of Object.values(editors))editor.disabled=!r2Connection;}
+  finally{loggingOut=false;logoutButton.disabled=false;for(const editor of Object.values(editors))editor.disabled=!r2Connection;updateCalendarAccess();}
 });
 
 // Move lines with Option+Up/Down; add Shift to duplicate them.
@@ -547,6 +582,177 @@ window.addEventListener('beforeunload',event=>{
   event.preventDefault();
   event.returnValue='';
 });
+function syncDateEditor(){
+  const editor=editors.scheduled,value=calendarData.scheduledByDate[selectedDate]||'';
+  if(editor.value!==value)editor.value=value;
+  historyFor(editor);
+}
+function commitDateEditor(editor){
+  const date=dateForEditor(editor);if(!date)return;
+  if(editor.value)calendarData.scheduledByDate[date]=editor.value;else delete calendarData.scheduledByDate[date];
+}
+function fullDate(date){return Calendar.dateObject(date).toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
+function replaceHTML(node,html){if(node.innerHTML!==html)node.innerHTML=html;}
+function calendarEditable(){return Boolean(r2Connection)&&!initialLoading&&!loginPending&&!loggingOut;}
+function updateCalendarAccess(){
+  const disabled=!calendarEditable();
+  document.querySelector('#routine-fields').disabled=disabled;
+  document.querySelectorAll('[data-routine-id], [data-edit-routine], [data-stop-routine]').forEach(node=>node.disabled=disabled);
+  editors.scheduled.disabled=disabled;previews.scheduled.querySelectorAll?.('input').forEach(node=>node.disabled=disabled);
+}
+function selectDate(date,focus=false){
+  if(!Calendar.validDate(date))return;
+  captureSelection(editors.scheduled);
+  selectedDate=date;visibleMonth=date.slice(0,7)+'-01';
+  syncDateEditor();render();
+  if(focus)document.querySelector('#calendar-grid').querySelector(`[data-date="${date}"]`)?.focus();
+}
+function renderCalendar(){
+  document.querySelector('#selected-date-heading').textContent=fullDate(selectedDate);
+  editors.scheduled.setAttribute('aria-label',fullDate(selectedDate)+' notes in Markdown');
+  previews.scheduled.setAttribute('aria-label','Formatted notes for '+fullDate(selectedDate));
+  document.querySelector('#calendar-month').textContent=Calendar.dateObject(visibleMonth).toLocaleDateString(undefined,{month:'long',year:'numeric'});
+  const start=Calendar.shiftDate(visibleMonth,-Calendar.dateObject(visibleMonth).getDay());
+  const cells=[];
+  for(let i=0;i<42;i++){
+    const date=Calendar.shiftDate(start,i);
+    if(!Calendar.validDate(date)){cells.push('<span></span>');continue;}
+    const count=Calendar.lineCount(calendarData.scheduledByDate[date]);
+    const routines=calendarData.routines.filter(routine=>Calendar.occursOn(routine,date)).length;
+    const lines=count+' '+(count===1?'line':'lines');
+    const label=fullDate(date)+', '+lines+(routines?', '+routines+' scheduled '+(routines===1?'routine':'routines'):'');
+    cells.push(`<button type="button" class="calendar-day${date.slice(0,7)!==visibleMonth.slice(0,7)?' outside':''}" data-date="${date}" aria-label="${escapeHTML(label)}" aria-pressed="${date===selectedDate}" ${date===todayKey?'aria-current="date"':''} tabindex="${date===selectedDate?0:-1}"><span>${Number(date.slice(-2))}</span>${count?'<small>'+lines+'</small>':''}${routines?'<span class="routine-dot" aria-hidden="true">●</span>':''}</button>`);
+  }
+  const grid=document.querySelector('#calendar-grid');
+  const focused=document.activeElement?.dataset?.date;
+  replaceHTML(grid,cells.join(''));
+  // When browsing away from the selected date, keep the displayed month keyboard-accessible.
+  if(!grid.querySelector?.('[tabindex="0"]'))grid.querySelector?.('.calendar-day:not(.outside)')?.setAttribute('tabindex','0');
+  if(focused)grid.querySelector?.(`[data-date="${focused}"]`)?.focus();
+}
+function routineDescription(rule){
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  return rule.frequency==='daily'?'Every day':rule.frequency==='weekly'?'Every '+rule.weekdays.map(day=>days[day]).join(', '):'Monthly on day '+rule.monthDay+' (or last day)';
+}
+function renderRoutines(){
+  const date=selectedDate;
+  const checklist=calendarData.routines.filter(routine=>Calendar.occursOn(routine,date)).map(routine=>{
+    const rule=Calendar.ruleOn(routine,date),checked=calendarData.routineCompletions[routine.id]?.[date];
+    return `<label><input type="checkbox" data-routine-id="${routine.id}" data-occurrence="${date}" ${checked?'checked':''} ${calendarEditable()?'':'disabled'}><span>${escapeHTML(rule.title)}</span></label>`;
+  }).join('');
+  replaceHTML(document.querySelector('#routines-scheduled'),checklist);
+  const html=calendarData.routines.map(routine=>{
+    const rule=routine.revisions.at(-1);
+    return `<div class="routine-row"><div>${escapeHTML(rule.title)}<small>${escapeHTML(routineDescription(rule))} · starts ${rule.startDate}${rule.stopped?' · Stopped':''}</small></div>${rule.stopped?'':`<button class="quiet" type="button" data-edit-routine="${routine.id}" ${calendarEditable()?'':'disabled'}>Edit</button><button class="quiet" type="button" data-stop-routine="${routine.id}" ${calendarEditable()?'':'disabled'}>Stop</button>`}</div>`;
+  }).join('')||'<p class="empty">No routines yet. Add one below.</p>';
+  replaceHTML(document.querySelector('#routine-list'),html);
+  updateCalendarAccess();
+}
+function calendarMarkdown(notes){
+  let result='\n\n# Calendar';
+  for(const [date,text] of Object.entries(notes.scheduledByDate))result+='\n\n## '+date+'\n\n'+text;
+  result+='\n\n# Routines';
+  for(const routine of notes.routines){
+    result+='\n\n## '+routine.revisions.at(-1).title;
+    for(const rule of routine.revisions)result+='\n\n- From '+rule.effectiveFrom+': '+rule.title+' — '+routineDescription(rule)+'; starts '+rule.startDate+(rule.stopped?'; stopped':'');
+    for(const date of Object.keys(notes.routineCompletions[routine.id]||{}))result+='\n- [x] '+date;
+  }
+  return result;
+}
+function resetRoutineForm(){
+  editingRoutineId=null;
+  document.querySelector('#routine-title').value='';
+  document.querySelector('#routine-start').value=todayKey;
+  document.querySelector('#routine-frequency').value='daily';
+  document.querySelector('#routine-month-day').value='1';
+  document.querySelectorAll('[name="routine-weekday"]').forEach(input=>input.checked=false);
+  document.querySelector('#routine-form-title').textContent='New routine';
+  document.querySelector('#routine-submit').textContent='Add routine';
+  document.querySelector('#routine-cancel').hidden=true;
+  document.querySelector('#routine-message').textContent='';
+  updateRoutineFields();
+}
+function updateRoutineFields(){
+  const frequency=document.querySelector('#routine-frequency').value;
+  document.querySelector('#routine-weekdays').hidden=frequency!=='weekly';
+  document.querySelector('#routine-month-label').hidden=frequency!=='monthly';
+  document.querySelector('#routine-month-day').required=frequency==='monthly';
+  document.querySelector('#routine-month-day').disabled=frequency!=='monthly';
+}
+function refreshToday(){
+  const now=Calendar.dateKey();
+  if(now!==todayKey){
+    const previousToday=todayKey;todayKey=now;render();
+    const start=document.querySelector('#routine-start');if(!editingRoutineId&&start.value===previousToday)start.value=todayKey;
+  }
+}
+function scheduleDayRefresh(){
+  const now=new Date(),next=new Date(now.getTime());next.setHours(24,0,0,0);
+  setTimeout(()=>{refreshToday();scheduleDayRefresh();},Math.max(1000,next-now));
+}
+document.querySelector('#calendar-prev').addEventListener('click',()=>{const month=Calendar.shiftMonth(visibleMonth,-1);if(Calendar.validDate(month)){visibleMonth=month;renderCalendar();}});
+document.querySelector('#calendar-next').addEventListener('click',()=>{const month=Calendar.shiftMonth(visibleMonth,1);if(Calendar.validDate(month)){visibleMonth=month;renderCalendar();}});
+document.querySelector('#calendar-today').addEventListener('click',()=>{refreshToday();selectDate(todayKey,true);});
+document.querySelector('#calendar-grid').addEventListener('click',event=>{const button=event.target.closest('[data-date]');if(button)selectDate(button.dataset.date,true);});
+document.querySelector('#calendar-grid').addEventListener('keydown',event=>{
+  const button=event.target.closest('[data-date]');if(!button)return;
+  const date=button.dataset.date,offset={ArrowLeft:-1,ArrowRight:1,ArrowUp:-7,ArrowDown:7}[event.key];
+  let next=offset?Calendar.shiftDate(date,offset):null;
+  if(event.key==='PageUp'||event.key==='PageDown')next=Calendar.shiftMonth(date,event.key==='PageUp'?-1:1);
+  if(event.key==='Home')next=Calendar.shiftDate(date,-Calendar.dateObject(date).getDay());
+  if(event.key==='End')next=Calendar.shiftDate(date,6-Calendar.dateObject(date).getDay());
+  if(next){event.preventDefault();selectDate(next,true);}
+});
+document.querySelector('#routines-scheduled').addEventListener('change',event=>{
+  const input=event.target,id=input.dataset.routineId,date=input.dataset.occurrence;
+  if(!calendarEditable()||!id)return;
+  const routine=calendarData.routines.find(item=>item.id===id);
+  if(!routine||!Calendar.occursOn(routine,date))return;
+  if(input.checked){if(!Object.hasOwn(calendarData.routineCompletions,id))calendarData.routineCompletions[id]={};calendarData.routineCompletions[id][date]=true;}
+  else {delete calendarData.routineCompletions[id]?.[date];if(!Object.keys(calendarData.routineCompletions[id]||{}).length)delete calendarData.routineCompletions[id];}
+  renderRoutines();updateSaveStatus();
+  document.querySelector('#routines-scheduled').querySelector(`[data-routine-id="${id}"]`)?.focus();
+});
+document.querySelector('#routine-frequency').addEventListener('change',updateRoutineFields);
+document.querySelector('#routine-cancel').addEventListener('click',resetRoutineForm);
+document.querySelector('#routine-form').addEventListener('submit',event=>{
+  event.preventDefault();if(!calendarEditable())return;
+  refreshToday();
+  const rule={effectiveFrom:todayKey,startDate:document.querySelector('#routine-start').value,title:document.querySelector('#routine-title').value.trim(),frequency:document.querySelector('#routine-frequency').value,stopped:false};
+  if(rule.frequency==='weekly')rule.weekdays=Array.from(document.querySelectorAll('[name="routine-weekday"]')).filter(input=>input.checked).map(input=>Number(input.value));
+  if(rule.frequency==='monthly')rule.monthDay=Number(document.querySelector('#routine-month-day').value);
+  const next=Calendar.normalizeCalendar(calendarData);
+  if(editingRoutineId){const routine=next.routines.find(item=>item.id===editingRoutineId);if(!routine)return;Calendar.reviseRoutine(routine,rule,todayKey);}
+  else next.routines.push({id:crypto.randomUUID(),revisions:[{...rule,effectiveFrom:rule.startDate}]});
+  try{calendarData=Calendar.normalizeCalendar(next);}catch{document.querySelector('#routine-message').textContent='Enter a name, a valid start date, and at least one weekday for weekly routines (or a monthly day from 1–31).';return;}
+  resetRoutineForm();render();updateSaveStatus();
+});
+document.querySelector('#routine-list').addEventListener('click',event=>{
+  if(!calendarEditable())return;
+  const button=event.target.closest('button');if(!button)return;
+  const id=button.dataset.editRoutine||button.dataset.stopRoutine,routine=calendarData.routines.find(item=>item.id===id);if(!routine)return;
+  refreshToday();
+  const rule=routine.revisions.at(-1);
+  if(button.dataset.stopRoutine){
+    Calendar.reviseRoutine(routine,{...rule,stopped:true},todayKey);
+    if(editingRoutineId===id)resetRoutineForm();render();updateSaveStatus();return;
+  }
+  editingRoutineId=id;
+  document.querySelector('#routine-title').value=rule.title;
+  document.querySelector('#routine-start').value=rule.startDate;
+  document.querySelector('#routine-frequency').value=rule.frequency;
+  document.querySelector('#routine-month-day').value=String(rule.monthDay||1);
+  document.querySelectorAll('[name="routine-weekday"]').forEach(input=>input.checked=Boolean(rule.weekdays?.includes(Number(input.value))));
+  document.querySelector('#routine-form-title').textContent='Edit routine · from today';
+  document.querySelector('#routine-submit').textContent='Update routine';
+  document.querySelector('#routine-cancel').hidden=false;
+  document.querySelector('#routine-message').textContent='';
+  updateRoutineFields();document.querySelector('#routine-title').focus();
+});
+window.addEventListener('focus',refreshToday);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshToday();});
+resetRoutineForm();scheduleDayRefresh();
+
 render();updateSaveStatus();
 const initialLoadPromise=loadInitialNotes();
 </script></body></html>

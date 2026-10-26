@@ -4,7 +4,7 @@ To migrate my to-do management from Notion to lighter method.
 
 ## Deploy from GitHub to Vercel
 
-1. Push the files above to your GitHub repository, including `dist/index.html` and `package-lock.json`.
+1. Push the files above to your GitHub repository, including `dist/index.html`, `dist/calendar-core.js`, and `package-lock.json`.
 2. Import the repository into Vercel.
 3. Select **Other** as the framework preset. Keep the root directory at the repository root. The checked-in `vercel.json` sets the build command to `npm run build` and output directory to `dist`.
 4. Add the environment variables below in Vercel Project Settings. Set them for each environment you intend to use (Production, and Preview if needed).
@@ -56,3 +56,26 @@ In any Markdown editor, **Option + Up/Down** moves the current line (or selected
 The editor loads notes directly from the authenticated R2 API (`GET /api/notes`), using the same bucket and key as saving. The backend returns the storage ETag as `X-R2-Version` as well as the standard `ETag`. The editor uses `X-R2-Version` for conditional saves so intermediary compression or page-cache ETag changes do not affect R2 version checks. Stale versions still reject writes to protect newer notes.
 
 The protected `?source=public` endpoint remains available for compatibility, but the editor no longer uses it for initial loading. `R2_PUBLIC_URL` is no longer needed for the normal editor workflow. After deploying this fix, export any unsaved edits before refreshing the page; the refreshed app must load the new version header before saving.
+
+
+## Calendar and selected-date notes
+
+The selected-date notes panel and **Calendar** sit side by side at the top of the workspace, stacking on smaller screens. The editor opens on today by default. Use **Hide calendar** / **Show calendar** to collapse or expand the selected-day editor, calendar, and routine manager together. Collapsing keeps unsaved edits and the selected date. Write Markdown for the selected date, or use **Read** to check off tasks. The existing Monday–Sunday panels remain separate general-purpose notes.
+
+Select a date in **Calendar** to view or edit that day’s notes in the panel beside it. Its heading and routine checklist follow the selected date. Each date keeps its own undo history. Switching dates retains unsaved edits.
+
+The calendar shows the number of **nonblank Markdown lines assigned to each date**. Headings and checked tasks count; empty lines and visual wrapping do not. Counts update immediately and do not include recurring routines. A dot marks dates with scheduled routines. Use the arrows to browse months, **Today** to return, or arrow keys within the calendar to move by day/week. Page Up/Down changes month; Weeks run Sunday through Saturday; Home/End selects Sunday/Saturday.
+
+Dates use the browser’s local timezone. The current-day calendar marker updates at local midnight or when you return to the app, preserving the selected date and existing notes. Click **Today** to select the current day.
+
+## Recurring routines
+
+Expand **Manage routines** directly below **Routines** in the selected-day panel, enter a title and start date, then choose **Daily**, **Weekly** (one or more weekdays), or **Monthly** (day 1–31). Click **Add routine**, then **Save to R2** to persist it.
+
+Routines appear in a checklist below the selected date’s notes when due. Each occurrence has its own completion state. Monthly routines use the last day of a short month when necessary: day 31 becomes February 28/29 or April 30. Unfinished occurrences stay on their original dates and do not carry forward into later dates.
+
+**Edit** and **Stop** apply from today onward. Previous dates retain the routine’s earlier title and schedule, along with their completion records. The first start date can be in the past or future. There are no background notifications or per-occurrence rescheduling controls.
+
+All dated notes, routine history, and completion records are saved together with the existing panels in the same R2 Markdown object. No additional database or scheduler is needed. The app calculates occurrences when displaying a date; simply browsing dates does not change stored data. **Save to R2** (Option/Alt + S or Cmd/Ctrl + S) persists edits; **Export .md** includes readable calendar/routine sections and lossless backup data. Older backups load with an empty calendar. Existing authentication, stale-save protection, and the 2 MB backup limit still apply.
+
+The test suite covers local dates and DST boundaries, short-month recurrence, independent occurrence completion, history preservation, daily line counts, date selection and per-date undo, midnight rollover, backup compatibility/validation, and calendar changes during saving or logout.

@@ -85,3 +85,14 @@ const nextSave=await call('PUT',{...auth,'Content-Type':'text/markdown','If-Matc
 assert.equal(nextSave.status,200);
 assert.equal((await call('PUT',{...auth,'Content-Type':'text/markdown','If-Match':transportedVersion},researchBackup)).status,412);
 console.log('Passed independent R2 version transport, consecutive saves, and stale-version rejection.');
+
+const calendarBackup = data => '<!-- todo-manager-backup-v1:' + encodeURIComponent(JSON.stringify({...withResearch,...data})) + ' -->';
+const calendarNotes={scheduledByDate:{'2026-11-01':'- [ ] Monthly review'},routines:[{id:'monthly',revisions:[{effectiveFrom:'2026-10-26',startDate:'2026-10-26',title:'Review',frequency:'monthly',monthDay:1,stopped:false}]}],routineCompletions:{monthly:{'2026-11-01':true}}};
+response=await call('PUT',{...auth,'Content-Type':'text/markdown','If-Match':etag},calendarBackup(calendarNotes));
+assert.equal(response.status,200);assert.equal(stored,calendarBackup(calendarNotes));
+for(const bad of [{scheduledByDate:{'2026-02-30':'bad'}},{routines:null},{routineCompletions:{unknown:{'2026-11-01':true}}}]){
+  const before=writes;
+  assert.equal((await call('PUT',{...auth,'Content-Type':'text/markdown','If-Match':etag},calendarBackup(bad))).status,400);
+  assert.equal(writes,before);
+}
+console.log('Passed calendar backup persistence and rejection of malformed calendar payloads before storage.');

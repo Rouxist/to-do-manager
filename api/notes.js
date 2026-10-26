@@ -1,3 +1,4 @@
+import { normalizeCalendar } from '../dist/calendar-core.js';
 import { configured, authorization, sameOrigin } from '../lib/auth.js';
 import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 
@@ -66,6 +67,7 @@ export function createNotesHandler({ env = process.env, clientFactory = clientFo
         const marker = content.match(/<!-- todo-manager-backup-v1:(.*?) -->\s*$/);
         const notes = JSON.parse(decodeURIComponent(marker?.[1] || ''));
         if (!notes || PERIODS.some(key => key === 'research' && notes[key] === undefined ? false : typeof notes[key] !== 'string')) throw new Error('Missing panel');
+        normalizeCalendar(notes);
       } catch {
         return reply('Expected a valid all-panel Markdown backup from this app.', 400);
       }
