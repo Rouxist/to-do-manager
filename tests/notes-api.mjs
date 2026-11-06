@@ -96,3 +96,15 @@ for(const bad of [{scheduledByDate:{'2026-02-30':'bad'}},{routines:null},{routin
   assert.equal(writes,before);
 }
 console.log('Passed calendar backup persistence and rejection of malformed calendar payloads before storage.');
+
+const withNotepad={...withResearch,notepad:'# Ideas\n\n- [ ] Write something'};
+const notepadBackup='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringify(withNotepad))+' -->';
+response=await call('PUT',{...auth,'Content-Type':'text/markdown','If-Match':etag},notepadBackup);
+assert.equal(response.status,200);assert.equal(stored,notepadBackup);
+for(const notepad of [null,42,{}]){
+  const before=writes;
+  const invalid='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringify({...withNotepad,notepad}))+' -->';
+  assert.equal((await call('PUT',{...auth,'Content-Type':'text/markdown','If-Match':etag},invalid)).status,400);
+  assert.equal(writes,before);
+}
+console.log('Passed Notepad persistence and rejection of invalid Notepad data.');

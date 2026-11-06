@@ -3,7 +3,7 @@ import { configured, authorization, sameOrigin } from '../lib/auth.js';
 import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 
 const LIMIT = 2 * 1024 * 1024;
-const PERIODS = ['chores', 'annual', 'quarterly', 'monthly', 'weekly', 'daily', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'research'];
+const PERIODS = ['chores', 'annual', 'quarterly', 'monthly', 'weekly', 'daily', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'research', 'notepad'];
 const headers = { 'Cache-Control': 'no-store', 'Content-Type': 'text/plain; charset=utf-8' };
 const versionHeaders = etag => etag && /^"[^"\r\n]+"$/.test(etag) ? { ETag: etag, 'X-R2-Version': etag } : {};
 const reply = (message, status, extra = {}) => new Response(message, { status, headers: { ...headers, ...extra } });
@@ -66,7 +66,7 @@ export function createNotesHandler({ env = process.env, clientFactory = clientFo
       try {
         const marker = content.match(/<!-- todo-manager-backup-v1:(.*?) -->\s*$/);
         const notes = JSON.parse(decodeURIComponent(marker?.[1] || ''));
-        if (!notes || PERIODS.some(key => key === 'research' && notes[key] === undefined ? false : typeof notes[key] !== 'string')) throw new Error('Missing panel');
+        if (!notes || PERIODS.some(key => ['research', 'notepad'].includes(key) && notes[key] === undefined ? false : typeof notes[key] !== 'string')) throw new Error('Missing panel');
         normalizeCalendar(notes);
       } catch {
         return reply('Expected a valid all-panel Markdown backup from this app.', 400);

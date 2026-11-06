@@ -45,6 +45,8 @@ npm run build
 
 For a manual browser check, enter the token, close and reopen the browser, then open the same app address. Notes should load without another prompt. After **Log out**, reopening should require the token again. Merely loading or logging out does not change the R2 file.
 
+**Notepad** replaces the Daily view with one full-width Markdown editor. It supports the same Write/Read modes, save/export, and editing shortcuts as the other panels. Older backups open with Notepad empty. Existing weekday notes remain preserved in exports and R2 saves.
+
 Research appears to the right of Chores below the planning panels (stacked below on small screens). It supports Markdown and the same save/export and duplication shortcuts. Older backups load with Research empty; the next save includes it.
 
 In any Markdown editor, **Option + Up/Down** moves the current line (or selected lines) above/below the neighboring line. **Option + Shift + Up/Down** duplicates it above/below. On Windows/Linux, use Alt in place of Option.
@@ -60,7 +62,7 @@ The protected `?source=public` endpoint remains available for compatibility, but
 
 ## Calendar and selected-date notes
 
-The selected-date notes panel and **Calendar** sit side by side at the top of the workspace, stacking on smaller screens. The editor opens on today by default. Use **Hide calendar** / **Show calendar** to collapse or expand the selected-day editor, calendar, and routine manager together. Collapsing keeps unsaved edits and the selected date. Write Markdown for the selected date, or use **Read** to check off tasks. The existing Monday–Sunday panels remain separate general-purpose notes.
+The selected-date notes panel and **Calendar** sit side by side at the top of the workspace, stacking on smaller screens. The editor opens on today by default. Use **Hide calendar** / **Show calendar** to collapse or expand the selected-day editor, calendar, and routine manager together. Collapsing keeps unsaved edits and the selected date. Write Markdown for the selected date, or use **Read** to check off tasks. Notepad provides a separate general-purpose writing area.
 
 Select a date in **Calendar** to view or edit that day’s notes in the panel beside it. Its heading and routine checklist follow the selected date. Each date keeps its own undo history. Switching dates retains unsaved edits.
 

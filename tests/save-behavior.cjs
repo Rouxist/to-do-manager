@@ -250,6 +250,30 @@ const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringif
   assert.equal(run('calendarData.routines.length'),0);assert.equal(run('Object.keys(calendarData.scheduledByDate).length'),0);assert.equal(scheduled.value,'');assert(scheduled.disabled);
   console.log('Passed selected-date editing, per-date undo, isolation across dates, routine occurrences, line counts, backup round trips, save races/conflicts, rollover, and logout cleanup.');
 
+  // Notepad persists independently while older weekday notes remain untouched.
+  const padApp=createApp(),padRun=code=>vm.runInContext(code,padApp.context);
+  padApp.latest.resolve(response(200,remoteText));await padRun('initialLoadPromise');
+  const pad=padApp.node('#editor-notepad');
+  assert.equal(pad.value,'');assert(!pad.disabled);assert(!padRun('hasUnsavedChanges()'));
+  pad.value='# Ideas\n\n- [ ] Write something';pad.events.input();
+  assert(padRun('hasUnsavedChanges()'));assert(padApp.node('#preview-notepad').innerHTML.includes('<h1>Ideas</h1>'));
+  const padBackup=padRun('markdownBackup()');
+  assert(padBackup.includes('# Notepad\n\n# Ideas'));
+  const padNotes=JSON.parse(padRun('JSON.stringify(parseMarkdownBackup('+JSON.stringify(padBackup)+'))'));
+  assert.equal(padNotes.notepad,pad.value);
+  for(const key of Object.keys(notes))assert.equal(padNotes[key],notes[key]);
+  // Heading-only exports from before Notepad and Research still load.
+  const legacy=Object.keys(notes).map(key=>'# '+(key==='daily'?'Monday':key[0].toUpperCase()+key.slice(1))+'\n\n'+notes[key]).join('\n\n');
+  assert.equal(padRun('parseMarkdownBackup('+JSON.stringify(legacy)+').notepad'),'');
+  assert.equal(padRun('parseMarkdownBackup('+JSON.stringify(legacy)+').sunday'),'Remote sunday');
+  pending=padApp.node('#r2-save').click();assert.equal(padApp.latest.options.body,padBackup);
+  padApp.latest.resolve(response());await pending;assert(!padRun('hasUnsavedChanges()'));
+  const padReopened=createApp();padReopened.latest.resolve(response(200,padBackup));await vm.runInContext('initialLoadPromise',padReopened.context);
+  assert.equal(padReopened.node('#editor-notepad').value,pad.value);
+  pending=padApp.node('#logout').click();padApp.latest.resolve(response());await pending;
+  assert.equal(pad.value,'');assert(pad.disabled);
+  console.log('Passed Notepad Markdown rendering, independent save/reload, legacy backup compatibility, weekday preservation, and logout cleanup.');
+
   const loggedOut=createApp();loggedOut.latest.resolve(response(401,'Sign in'));await vm.runInContext('initialLoadPromise',loggedOut.context);
   assert(loggedOut.node('#token-dialog').open);assert.equal(loggedOut.node('#editor-daily').value,'');
   assert(!('pagehide' in app.windowEvents));
