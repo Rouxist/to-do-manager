@@ -255,7 +255,9 @@ const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringif
   padApp.latest.resolve(response(200,remoteText));await padRun('initialLoadPromise');
   const pad=padApp.node('#editor-notepad');
   assert.equal(pad.value,'');assert(!pad.disabled);assert(!padRun('hasUnsavedChanges()'));
+  assert.equal(padApp.node('#r2-save').dataset.unsaved,'false');
   pad.value='# Ideas\n\n- [ ] Write something';pad.events.input();
+  assert.equal(padApp.node('#r2-save').dataset.unsaved,'true');
   assert(padRun('hasUnsavedChanges()'));assert(padApp.node('#preview-notepad').innerHTML.includes('<h1>Ideas</h1>'));
   const padBackup=padRun('markdownBackup()');
   assert(padBackup.includes('# Notepad\n\n# Ideas'));
@@ -268,6 +270,7 @@ const remoteText='<!-- todo-manager-backup-v1:'+encodeURIComponent(JSON.stringif
   assert.equal(padRun('parseMarkdownBackup('+JSON.stringify(legacy)+').sunday'),'Remote sunday');
   pending=padApp.node('#r2-save').click();assert.equal(padApp.latest.options.body,padBackup);
   padApp.latest.resolve(response());await pending;assert(!padRun('hasUnsavedChanges()'));
+  assert.equal(padApp.node('#r2-save').dataset.unsaved,'false');
   const padReopened=createApp();padReopened.latest.resolve(response(200,padBackup));await vm.runInContext('initialLoadPromise',padReopened.context);
   assert.equal(padReopened.node('#editor-notepad').value,pad.value);
   pending=padApp.node('#logout').click();padApp.latest.resolve(response());await pending;
